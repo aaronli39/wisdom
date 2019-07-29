@@ -20,4 +20,5 @@ def genStudentAccDct(csv): #CSV should be in the format studentName,OSIS/ID# wit
         })
     return output
 
-print(genStudentAccDct(open('exampleStudents.csv', 'r').read()))
+if __name__ == "__main__":
+    print(genStudentAccDct(open('exampleStudents.csv', 'r').read()))
