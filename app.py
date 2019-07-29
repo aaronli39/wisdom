@@ -9,7 +9,11 @@ app.config["SECRET_KEY"] = urandom(32)
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("landing.html")
+
+@app.route("/admin")
+def admin():
+    return render_template("admin_home.html")
 
 if __name__ == "__main__":
     app.debug = True

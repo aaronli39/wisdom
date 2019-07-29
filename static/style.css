@@ -1,0 +1,36 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.special {
+    font-family: 'Lobster Two', cursive;
+}
+
+.welcome {
+    margin-top: 10%;
+    margin-bottom: 10%;
+    font-weight: 700;
+    text-shadow: 1px 1px 3px black;
+}
+
+.shadow {
+    text-shadow: 1px 1px 3px black;
+    font-weight: 700;
+}
+
+button:hover span {
+    display: none;
+}
+
+.new_user:hover:after {
+    content: "Sign Up";
+}
+
+.returning:hover:after {
+    content: "Login";
+}
+
+#home {
+    background-image: url("./bg.jpeg");
+    background-size: cover;
+}
