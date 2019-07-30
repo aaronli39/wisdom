@@ -1,4 +1,4 @@
-# Welcome to *insert program name here*
+# Welcome to Wistom: your student management solution
 
 ---
 
