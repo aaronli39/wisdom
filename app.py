@@ -23,6 +23,6 @@ def admin():
     return render_template("admin_home.html")
 
 if __name__ == "__main__":
-    # app.debug = True
-    # app.run()
+    app.debug = True
+    app.run()
 

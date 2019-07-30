@@ -1,7 +1,7 @@
 import random
 from flask_pymongo import PyMongo
 
-CHARSET = set("1234567890QWERTYUIOPASDFGHJKLZXCVBNM")
+CHARSET = "1234567890QWERTYUIOPASDFGHJKLZXCVBNM"
 
 class DBTools:
 
@@ -9,7 +9,7 @@ class DBTools:
         self.mongo = PyMongo(app)
 
     def registerSuperUser(self, username, password):
-        if self.mongo.db.superAdmin.find({'username' : username}).limit(1).size() != 0:
+        if self.mongo.db.superAdmin.find({'username' : username}).limit(1).count() != 0:
             return 'User already exists!'
         self.mongo.db.superAdmin.insert({
             'username' : username,
@@ -20,7 +20,7 @@ class DBTools:
 
     def registerSchool(self, username, schoolName):
         schoolID = ''.join(random.choice(CHARSET) for x in range(10))
-        while self.mongo.db.school.find({'schoolID' : schoolID}).limit(1).size() != 0:
+        while self.mongo.db.school.find({'schoolID' : schoolID}).limit(1).count() != 0:
             schoolID += random.choice(CHARSET)
         self.mongo.db.school.insert({ #Registers new school to database
             'schoolID' : schoolID,
@@ -31,7 +31,5 @@ class DBTools:
             'classes' : []
         })
         self.mongo.db.superAdmin.update({ 'username' : username }, { #Add school to user's school list
-            {
-                '$push' : {'schools' : schoolID}
-            }
+            '$push' : {'schools' : schoolID}
         })
