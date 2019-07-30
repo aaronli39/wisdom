@@ -106,15 +106,15 @@ class DBTools:
             return "This class does not exist!"
         if not(self.checkStudentExists(schoolID, studentID)):
             return "This student does not exist!"
+        if self.checkStudentInClass(schoolID, studentID, classID):
+            return "This student is already in this class!"
         classSelector = { #Selects the class with a matching classID
             'schoolID' : schoolID,
             'classes.classID' : classID
         }
-        for i in self.mongo.db.school.find(classSelector):
-            print(i)
         self.mongo.db.school.update(classSelector, { #Add student to class's student list
             '$push' : {
-                'classes.students' : studentID
+                'classes.$.students' : studentID
             }
         })
         studentSelector = { #Selects the student with a matching studentID
@@ -123,7 +123,7 @@ class DBTools:
         }
         self.mongo.db.school.update(studentSelector, {
             '$push' : {
-                'students.classes' : classID
+                'students.$.classes' : classID
             }
         })
         return 'Class added to student.'
@@ -149,5 +149,17 @@ class DBTools:
         }
         return self.mongo.db.school.find(studentCheck).limit(1).count() != 0
     
+    def checkStudentInClass(self, schoolID, studentID, classID):
+        inClassCheck = {
+            'schoolID' : schoolID,
+            'classes' : {
+                '$elemMatch' : {
+                    'classID' : classID,
+                    'students' : studentID
+                }
+            }
+        }
+        return self.mongo.db.school.find(inClassCheck).limit(1).count() != 0
+
     def getSchoolIDs(self, username):
         return [x['schools'] for x in self.mongo.db.superAdmin.find({'username' : username}).limit(1)][0]
