@@ -163,3 +163,18 @@ class DBTools:
 
     def getSchoolIDs(self, username):
         return [x['schools'] for x in self.mongo.db.superAdmin.find({'username' : username}).limit(1)][0]
+    
+    def authSuperAdmin(self, username, password):
+        authCheck = {
+            'username' : username,
+            'password' : password
+        }
+        return self.mongo.db.superAdmin.find(authCheck).limit(1).count() != 0
+    
+    def authStudent(self, schoolID, username, password):
+        authCheck = {
+            'schoolID' : schoolID,
+            'students.username' : username,
+            'students.password' : password
+        }
+        return self.mongo.db.school.find(authCheck).limit(1).count() != 0
