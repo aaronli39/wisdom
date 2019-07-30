@@ -1,5 +1,17 @@
 body {
     font-family: 'Open Sans', sans-serif;
+    height: 100%;
+    margin: 0;
+}
+
+@media screen and (max-width: 768px) {
+    body {
+        padding-top: 40px;
+        margin: 0;
+    }
+    .welcome {
+        font-size: 3.5rem !important;
+    }
 }
 
 .special {
@@ -8,8 +20,9 @@ body {
 
 .welcome {
     margin-top: 10%;
-    margin-bottom: 10%;
+    margin-bottom: 8%;
     font-weight: 700;
+    font-size: 5rem;
     text-shadow: 1px 1px 3px black;
 }
 
@@ -22,15 +35,67 @@ button:hover span {
     display: none;
 }
 
-.new_user:hover:after {
-    content: "Sign Up";
+button:hover:after span {
+    background-color: black;
+    color: white;
 }
 
-.returning:hover:after {
-    content: "Login";
+.new_user {
+    background-color: white;
+    color: #292b2c;
+    border-color: #292b2c;
+    /* transition: all .2s linear; */
+}
+
+.mini {
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.section-head {
+    font-family: 'Lobster Two', cursive;
+    text-decoration: underline;
+    margin-top: 7%;
+    font-size: 3.5rem;
+}
+
+.new_user:hover {
+    background-color: #292b2c;
+    border-color: white;
+}
+
+.new_user:hover:after {
+    content: "   Sign Up!   ";
+    white-space: pre;
+    color: lightgray;
+    /* transition: all .2s linear; */
+}
+
+.returning {
+    background-color: #292b2c;
+    color: white;
+    border-color: white;
+    margin-bottom: 7%;
+}
+
+.returning:hover {
+    background-color: white;
+    border-color: #292b2c;
+}
+
+.returning:hover::after {
+    content: "    Login Here!    ";
+    white-space: pre;
+    color: #292b2c;
+}
+
+.no:focus, .no:active {
+    outline: none !important;
+    box-shadow: none;
 }
 
 #home {
     background-image: url("./bg.jpeg");
     background-size: cover;
+    height: 100vh;
 }

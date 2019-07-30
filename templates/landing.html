@@ -11,12 +11,13 @@
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Lobster+Two:700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0-12/css/all.min.css">
     <link rel="stylesheet" href="../static/style.css">
     <title>Hello, world!</title>
 </head>
 
-<body data-spy="scroll" data-target=".navbar" data-offset="50">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<body data-spy="scroll" data-target=".navbar" data-offset="70">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
         <a class="navbar-brand special" href="/">
             <img src="../static/logo3.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Wisdom</a>
@@ -34,18 +35,70 @@
     </nav>
 
     <section id="home">
-        
-        <div class="row text-center">
-            <div class="col">
-                <h2 class="display-3 text-light d-inline-block ml-5 mr-5 welcome">Welcome to Wisdom</h2>
-            </div>
-        </div>
+        <div class="container-fluid">
 
-        <div class="row text-center">
-            <div class="col">
-                <button class="btn btn-primary new_user"><span>New User?</span></button>
-                <button class="btn btn-success returning"><span>Returning User?</span></button>
+            <div class="row text-center">
+                <div class="col">
+                    <h2 class="text-light d-inline-block welcome">Welcome to Wisdom</h2>
+                </div>
             </div>
+
+            <div class="row text-center">
+                <div class="col">
+                    <button class="btn no new_user"><span>New User?</span></button>
+                    <br>
+                    <button class="btn no mt-4 returning"><span>Returning User?</span></button>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <section id="features" class="bg-light">
+        <div class="container-fluid">
+
+            <div class="row text-center">
+                <div class="col">
+                    <h2 class="section-head special mb-4">Features</h2>
+                </div>
+            </div>
+
+        </div>
+        <div class="container mt-3">
+
+            <div class="row text-center mt-3 mb-5">
+
+                <div class="col-md-4">
+                    <i class="fa fa-book" style="font-size: 3rem;"></i>
+                    <h5 class="mt-3 mb-3 mini">Students</h5>
+                    <ul class="text-left pl-5">
+                        <li>view your classes</li>
+                        <li>check homework and class posts</li>
+                        <li>view your grades</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <i class="fas fa-apple-alt" style="font-size: 3rem; color: red;"></i>
+                    <h5 class="mt-3 mb-3 mini">Teachers</h5>
+                    <ul class="text-left pl-5">
+                        <li>set grades for students</li>
+                        <li>easily create class posts</li>
+                        <li>view homework submissions</li>
+                        <li>set and view assignment deadlines</li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <i class="fa fa-tv" style="font-size: 3rem; color: blue"></i>
+                    <h5 class="mt-3 mb-3 mini">Admins</h5>
+                    <ul class="text-left pl-5">
+                        <li>generate student usernames/passwords from a CSV file</li>
+                        <li>create and delete new classes</li>
+                        <li>manage multiple schools</li>
+                    </ul>
+                </div>
+
+            </div>
+
         </div>
     </section>
 
