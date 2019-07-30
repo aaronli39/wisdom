@@ -8,10 +8,10 @@ class DBTools:
     def __init__(self, app):
         self.mongo = PyMongo(app)
 
-    def registerSuperAdmin(self, username, password):
-        if self.mongo.db.superAdmin.find({'username' : username}).limit(1).count() != 0:
+    def registerAdmin(self, username, password):
+        if self.checkAdminExists(username):
             return 'User already exists!'
-        self.mongo.db.superAdmin.insert({
+        self.mongo.db.admin.insert({
             'username' : username,
             'password' : password,
             'schools' : []
@@ -25,12 +25,12 @@ class DBTools:
         self.mongo.db.school.insert({ #Registers new school to database
             'schoolID' : schoolID,
             'schoolName' : schoolName,
-            'admins' : [],
+            'admins' : [username],
             'students' : [],
             'teachers' : [],
             'classes' : []
         })
-        self.mongo.db.superAdmin.update({ 'username' : username }, { #Add school to user's school list
+        self.mongo.db.admin.update({ 'username' : username }, { #Add school to user's school list
             '$push' : {'schools' : schoolID}
         })
     
@@ -59,23 +59,25 @@ class DBTools:
             }
         })
 
-    def addAdmin(self, username, schoolID, adminUsername, adminPass, name):
-        superAdminCheck = {
+    def addAdmin(self, username, schoolID, adminUsername):
+        if not(self.checkAdminExists(adminUsername)):
+            return "This user doesn't exist!"
+        adminCheck = {
             'username' : username,
             'schools' : schoolID
         }
-        if self.mongo.db.superAdmin.find(superAdminCheck).limit(1).count() == 0:
-            return "User is not a super admin of this school!"
+        if self.mongo.db.admin.find(adminCheck).limit(1).count() == 0:
+            return "User is not an admin of this school!"
         if self.checkAdmin(schoolID, adminUsername):
-            return "Admin already exists!"
-        name = name.strip().split(' ')
-        self.mongo.db.school.update({'schoolID' : schoolID}, {
+            return "This user is already an admin!"
+        self.mongo.db.school.update({'schoolID' : schoolID}, { #Add user to admins list
             '$push' : {
-                'admins' : {
-                    'username' : adminUsername,
-                    'password' : adminPass,
-                    'name' : name
-                }
+                'admins' : adminUsername
+            }
+        })
+        self.mongo.db.admin.update({'username' : adminUsername}, { #Add school to admin's school list
+            '$push' : {
+                'schools' : schoolID
             }
         })
         return "Admin added."
@@ -131,7 +133,7 @@ class DBTools:
     def checkAdmin(self, schoolID, username):
         adminCheck = {
             'schoolID' : schoolID,
-            'admins.username' : username
+            'admins' : username
         }
         return self.mongo.db.school.find(adminCheck).limit(1).count() != 0
     
@@ -149,6 +151,9 @@ class DBTools:
         }
         return self.mongo.db.school.find(studentCheck).limit(1).count() != 0
     
+    def checkAdminExists(self, username):
+        return self.mongo.db.admin.find({'username' : username}).limit(1).count() != 0
+    
     def checkStudentInClass(self, schoolID, studentID, classID):
         inClassCheck = {
             'schoolID' : schoolID,
@@ -162,14 +167,14 @@ class DBTools:
         return self.mongo.db.school.find(inClassCheck).limit(1).count() != 0
 
     def getSchoolIDs(self, username):
-        return [x['schools'] for x in self.mongo.db.superAdmin.find({'username' : username}).limit(1)][0]
+        return [x['schools'] for x in self.mongo.db.admin.find({'username' : username}).limit(1)][0]
     
-    def authSuperAdmin(self, username, password):
+    def authAdmin(self, username, password):
         authCheck = {
             'username' : username,
             'password' : password
         }
-        return self.mongo.db.superAdmin.find(authCheck).limit(1).count() != 0
+        return self.mongo.db.admin.find(authCheck).limit(1).count() != 0
     
     def authStudent(self, schoolID, username, password):
         authCheck = {
