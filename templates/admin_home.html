@@ -4,8 +4,24 @@
 
 {% block body %}
 <div class="container">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <a class="navbar-brand special" href="/">
+            <img src="../static/logo3.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Wisdom</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="#home">Home</a>
+                <a class="nav-item nav-link" href="#features">Features</a>
+                <a class="nav-item nav-link" href="#about">About</a>
+            </div>
+        </div>
+    </nav>
 
-    <div class="row text-center">
+    <div class="row text-center mt-2">
         <div class="col">
             <h3 class="display-3">
                 Welcome Admin
@@ -22,10 +38,10 @@
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="inputGroupFile04">
-                        <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                        <label id="changeMe" class="custom-file-label" for="inputGroupFile04">Choose file</label>
                     </div>
                     <div class="input-group-append">
-                        <button class="btn btn-outline-dark" type="submit">Submit</button>
+                        <button id="filer" class="btn btn-outline-dark" type="submit">Submit</button>
                     </div>
                 </div>
             </form>
@@ -48,8 +64,71 @@
                 </div>
             </form>
         </div>
+    </div>
+
+    <div class="row mt-3">
+
+        <div class="col">
+            <div class="d-flex justify-content-between mb-3">
+                <div class="">
+                    <h1>Schools You Manage</h1>
+                </div>
+                <div class=""><a href="/createClass" class="btn btn-dark">Create Class</a></div>
+            </div>
+            {% set manage = managed %}
+
+            {% if manage|length == 0 %}
+            <p class="mt-2 mb-5" style="color: red;">You aren't managing any schools, go create one!</p>
+            {% else %}
+            {% for i in range((manage|length // 4) + 1) %}
+            <!-- Row stuff -->
+            <div class="row mt-3 ml-3 mr-3">
+                {% for j in managed[i * 4: i * 4 + 4] %}
+                <div class="col-md-3">
+                    <div class="card w-75">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ j[0] }}</h5>
+                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
+                            </p>
+                            <a href="/school/{{ j[1] }}" class="btn btn-primary">Open</a>
+                        </div>
+                    </div>
+                    <div class="card mr-2 ml-2" style="width: 100%;">
+                        <a href="/class/{{j[0]}}">
+                            <div class="card-img-caption">
+                                <p id="caption-text2" class="card-text">{{ j[1] }}</p>
+                                <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
+                            </div>
+                        </a>
+
+                        <div class="card-body">
+                            <h5 class="card-title">Course Description</h5>
+                            <p class="card-text">{{ j[2] | safe }}</p>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+
+            </div>
+            {% endfor %}
+            {% endif %}
+
+        </div>
 
     </div>
 
 </div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+<script>
+    $('#filer').on('change', function () {
+        //get the file name
+        console.log("helo");
+        var fileName = $(this).val();
+        //replace the "Choose a file" label
+        $(this).next('.custom-file-label').html(fileName);
+    })
+</script>
+
 {% endblock %}

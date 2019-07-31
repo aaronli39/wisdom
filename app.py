@@ -56,6 +56,10 @@ def reg():
 def admin():
     return render_template("admin_home.html")
 
+@app.route("/createClass")
+def createClass():
+    return render_template("createClass.html")
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
