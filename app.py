@@ -4,6 +4,8 @@ from os import urandom
 from flask import Flask, request, render_template, redirect, flash, session
 from util import Database
 
+ALLOWED_EXTENSIONS = {'csv'}
+
 config = json.load(open("config/mongo.json"))
 
 app = Flask(__name__)
@@ -51,6 +53,22 @@ def reg():
     else:
         flash(dbtools.registerAdmin(inputUsername, inputPass))
     return render_template('register.html')
+
+@app.route("/uploadStudentCSV", methods = ['POST'])
+def uploadStudentCSV():
+    if 'inputCSV' not in request.files:
+        flash('No file part')
+        return redirect('/admin')
+    inputFile = request.files['inputCSV']
+    if inputFile.filename == '':
+        flash('No file uploaded')
+        return redirect('/admin')
+    if inputFile.filename.rsplit('.',1)[1].lower() != 'csv':
+        flash('Invalid file type')
+        return redirect('/admin')
+    flash('Upload successful')
+    print(inputFile.read())
+    return redirect('/admin')
 
 @app.route("/admin")
 def admin():
