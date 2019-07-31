@@ -193,3 +193,15 @@ class DBTools:
             'students.password' : password
         }
         return self.mongo.db.school.find(authCheck).limit(1).count() != 0
+    
+    def getSchoolInfo(self, schoolID):
+        for i in self.mongo.db.school.find({'schoolID' : schoolID}).limit(1):
+            return i
+    
+    def getBasicSchoolInfo(self, username):
+        schoolIDs = self.getSchoolIDs(username)
+        #[School Name, School ID, Number of Students]
+        output = []
+        for currID in schoolIDs:
+            currSchool = self.getSchoolInfo(currID)
+            output.append([currSchool['schoolName'], currID, len(currSchool['students'])])

@@ -21,6 +21,9 @@ def index():
 @app.route("/login", methods = ["GET", "POST"])
 def log():
     if request.method == "GET":
+        if 'username' in session:
+            if session['userType'] == 'admin':
+                return redirect('/admin')
         return render_template('login.html')
     if 'username' in session:
         flash('Already logged in!')
@@ -30,6 +33,8 @@ def log():
     if request.form['schoolid'] == '': #Admin login
         if dbtools.authAdmin(inputUsername, inputPass):
             session['username'] = inputUsername
+            session['userType'] = 'admin'
+            return redirect('/admin')
         else:
             flash('Invalid username or password.')
     return render_template('login.html')
