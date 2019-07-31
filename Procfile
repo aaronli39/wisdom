@@ -1,1 +1,1 @@
-web: gunicorn app:app
+web: gunicorn managing_manatees:app
