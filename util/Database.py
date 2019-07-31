@@ -34,9 +34,10 @@ class DBTools:
             '$push' : {'schools' : schoolID}
         })
     
-    def addStudent(self, username, schoolID, studentName, studentID):
-        if not(self.checkAdmin(schoolID, username)):
-            return "User is not an admin of this school!"
+    def addStudent(self, username, schoolID, studentName, studentID, skipAdminCheck = False):
+        if not(skipAdminCheck):
+            if not(self.checkAdmin(schoolID, username)):
+                return "User is not an admin of this school!"
         if self.checkStudentExists(schoolID, studentID):
             return "Student already exists!"
         name = studentName.strip().split(' ')
@@ -58,6 +59,15 @@ class DBTools:
                 }
             }
         })
+
+    def addStudentsFromCSV(self, username, schoolID, csv):
+        if not(self.checkAdmin(schoolID, username)):
+            return "User is not an admin of this school!"
+        csv = [[value.strip() for value in line.split(',')] for line in csv.split('\n')[1:]]
+        for studentInfo in csv:
+            if len(studentInfo) < 2:
+                continue
+            self.addStudent(username, schoolID, studentInfo[0], studentInfo[1], skipAdminCheck = True)
 
     def addAdmin(self, username, schoolID, adminUsername):
         if not(self.checkAdminExists(adminUsername)):
