@@ -74,9 +74,9 @@ def uploadStudentCSV():
 def admin():
     return render_template("admin_home.html")
 
-@app.route("/createClass")
+@app.route("/createSchool")
 def createClass():
-    return render_template("createClass.html")
+    return render_template("createSchool.html")
 
 if __name__ == "__main__":
     app.debug = True
