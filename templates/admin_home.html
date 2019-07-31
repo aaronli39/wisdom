@@ -35,19 +35,19 @@
             <h3>Generate Student info from CSV</h3>
             <!-- <button class="btn btn-primary">Here</button> -->
             {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <div class="alert alert-primary">
-                    {% for message in messages %}
-                        {{ message }}
-                    {% endfor %}
-                    </div>
-                {% endif %}
+            {% if messages %}
+            <div class="alert alert-primary">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
             {% endwith %}
             <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
                 <div class="input-group">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
-                        <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+                        <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
                     </div>
                     <div class="input-group-append">
                         <button id="filer" class="btn btn-outline-dark" type="submit">Submit</button>
@@ -131,13 +131,11 @@
     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
     crossorigin="anonymous"></script>
 <script>
-    $('#filer').on('change', function () {
-        //get the file name
-        console.log("helo");
+    $('.custom-file-input').on('change', function () {
         var fileName = $(this).val();
-        //replace the "Choose a file" label
-        $(this).next('.custom-file-label').html(fileName);
-    })
+        fileName = fileName.substring(12);
+        $(this).next('.form-control-file').addClass("selected").html(fileName);
+    });
 </script>
 
 {% endblock %}
