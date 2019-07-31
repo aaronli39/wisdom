@@ -18,6 +18,14 @@ dbtools = Database.DBTools(app)
 def index():
     return render_template("landing.html")
 
+@app.route("/login")
+def log():
+    return render_template("login.html")
+
+@app.route("/register")
+def reg():
+    return render_template("register.html")
+
 @app.route("/admin")
 def admin():
     return render_template("admin_home.html")

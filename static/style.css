@@ -48,13 +48,14 @@ button:hover:after span {
 }
 
 .mini {
+    font-family: 'Fira Sans', sans-serif;
     font-weight: 600;
-    text-decoration: underline;
+    /* text-decoration: underline; */
 }
 
 .section-head {
-    font-family: 'Lobster Two', cursive;
-    text-decoration: underline;
+    font-family: 'Fira Sans', sans-serif;
+    border-bottom: 4px solid black;
     margin-top: 7%;
     font-size: 3.5rem;
 }
