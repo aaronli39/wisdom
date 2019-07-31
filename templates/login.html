@@ -26,7 +26,16 @@
 				<span class="login100-form-title p-b-41">
 					Login
 				</span>
-				<form class="login100-form validate-form p-b-33 p-t-5">
+				{% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-primary">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+				<form class="login100-form validate-form p-b-33 p-t-5" action="/login" method="POST">
 
 					<div class="wrap-input100 validate-input" data-validate="Enter username">
 						<input class="input100" type="text" name="username" placeholder="Username">
@@ -45,11 +54,9 @@
 
 
 					<div class="container-login100-form-btn m-t-32">
-						<a href="/auth">
-							<button id="log" class="login100-form-btn">
-								Login
-							</button>
-						</a>
+						<button id="log" class="login100-form-btn">
+							Login
+						</button>
 					</div>
 				</form>
 			</div>

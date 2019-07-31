@@ -16,7 +16,7 @@ class DBTools:
             'password' : password,
             'schools' : []
         })
-        return 'User added.'
+        return 'Registration successful.'
 
     def registerSchool(self, username, schoolName):
         schoolID = ''.join(random.choice(CHARSET) for x in range(10))

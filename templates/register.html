@@ -26,7 +26,16 @@
                 <span class="login100-form-title p-b-41">
                     Register Below
                 </span>
-                <form class="login100-form validate-form p-b-33 p-t-5">
+                {% with messages = get_flashed_messages() %}
+                    {% if messages %}
+                        <div class="alert alert-primary">
+                        {% for message in messages %}
+                            {{ message }}
+                        {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+                <form class="login100-form validate-form p-b-33 p-t-5" id="registerForm" method="POST" action="/register">
 
                     <div class="wrap-input100 validate-input" data-validate="Enter username">
                         <input class="input100" type="text" name="username" placeholder="Username">
@@ -34,21 +43,19 @@
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Enter password">
-                        <input class="input100" type="password" name="pass" placeholder="Password">
+                        <input class="input100" type="password" name="pass" placeholder="Password" id="passInput">
                         <span class="focus-input100" data-placeholder="&#xe80f;"></span>
                     </div>
 
                     <div class="wrap-input100 validate-input" data-validate="Confirm password">
-                        <input class="input100" type="password" name="pass" placeholder="Confirm password">
+                        <input class="input100" type="password" name="passConfirm" placeholder="Confirm password" id="confirmPass">
                         <span class="focus-input100" data-placeholder="&#xe80f;"></span>
                     </div>
 
                     <div class="container-login100-form-btn m-t-32">
-                        <a href="/auth">
-                            <button class="login100-form-btn">
-                                Login
-                            </button>
-                        </a>
+                        <button class="login100-form-btn" id="registerBtn">
+                            Register
+                        </button>
                     </div>
                 </form>
             </div>

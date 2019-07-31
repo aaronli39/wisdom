@@ -1,7 +1,7 @@
 import json
 from os import urandom
 
-from flask import Flask, request, render_template, redirect
+from flask import Flask, request, render_template, redirect, flash, session
 from util import Database
 
 config = json.load(open("config/mongo.json"))
@@ -18,13 +18,34 @@ dbtools = Database.DBTools(app)
 def index():
     return render_template("landing.html")
 
-@app.route("/login")
+@app.route("/login", methods = ["GET", "POST"])
 def log():
-    return render_template("login.html")
+    if request.method == "GET":
+        return render_template('login.html')
+    if 'username' in session:
+        flash('Already logged in!')
+        return render_template('login.html')
+    inputPass = request.form['pass']
+    inputUsername = request.form['username']
+    if request.form['schoolid'] == '': #Admin login
+        if dbtools.authAdmin(inputUsername, inputPass):
+            session['username'] = inputUsername
+        else:
+            flash('Invalid username or password.')
+    return render_template('login.html')
 
-@app.route("/register")
+@app.route("/register", methods = ['GET', 'POST'])
 def reg():
-    return render_template("register.html")
+    if request.method == 'GET':
+        return render_template("register.html")
+    inputPass = request.form['pass']
+    passConfirm = request.form['passConfirm']
+    inputUsername = request.form['username']
+    if passConfirm != inputPass:
+        flash('Passwords do not match!')
+    else:
+        flash(dbtools.registerAdmin(inputUsername, inputPass))
+    return render_template('register.html')
 
 @app.route("/admin")
 def admin():
