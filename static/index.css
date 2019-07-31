@@ -1,3 +1,24 @@
 body {
     padding-top: 65px;
 }
+
+.search {
+    opacity: 0;
+    -webkit-transition: all .5s ease;
+   -moz-transition: all .5s ease;
+   transition: all .5s ease;
+   width:0px;
+}
+
+input.form-control.search.expanded {
+    border-radius: 0;
+    width: 300px;
+}
+
+.search.expanded {
+    opacity: 1;
+}
+
+.nav-categories {
+    margin-left: 15px;
+}
