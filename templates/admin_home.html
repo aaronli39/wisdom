@@ -18,10 +18,19 @@
         <div class="col">
             <h3>Generate Student info from CSV</h3>
             <!-- <button class="btn btn-primary">Here</button> -->
-            <form action="/submitFile" method="POST" enctype="multipart/form-data" class="form-group m-0">
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <div class="alert alert-primary">
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+            <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
                 <div class="input-group">
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile04">
+                        <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
                         <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
                     </div>
                     <div class="input-group-append">
