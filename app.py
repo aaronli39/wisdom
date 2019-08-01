@@ -142,6 +142,12 @@ def logout():
         session.pop('userType')
     return redirect('/')
 
+@app.route('/school/<schoolID>/class/<classID>')
+def classRoute(schoolID, classID):
+    if 'username' not in session:
+        return redirect('/login')
+    return render_template('class.html', schoolID = schoolID, classID = classID)
+
 if __name__ == "__main__":
     if REPL_MODE:
         while True:
