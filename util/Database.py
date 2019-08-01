@@ -62,12 +62,15 @@ class DBTools:
 
     def addStudentsFromCSV(self, username, schoolID, csv):
         if not(self.checkAdmin(schoolID, username)):
-            return "User is not an admin of this school!"
+            return "You are not a administrator of this school!"
         csv = [[value.strip() for value in line.split(',')] for line in csv.split('\n')[1:]]
+        numAdded = 0
         for studentInfo in csv:
             if len(studentInfo) < 2:
                 continue
-            self.addStudent(username, schoolID, studentInfo[0], studentInfo[1], skipAdminCheck = True)
+            if self.addStudent(username, schoolID, studentInfo[0], studentInfo[1], skipAdminCheck = True) == None:
+                numAdded += 1
+        return f"{numAdded} students added."
 
     def addAdmin(self, username, schoolID, adminUsername):
         if not(self.checkAdminExists(adminUsername)):
@@ -211,3 +214,30 @@ class DBTools:
         if not(self.checkAdmin(schoolID, username)):
             return 'User is not an admin of this school!'
         self.mongo.db.school.remove({'schoolID' : schoolID}, True)
+    
+    def removeStudentFromClass(self, username, schoolID, studentID, classID):
+        if not(self.checkAdmin(schoolID, username)):
+            return 'User is not an admin of this school!'
+        if not(self.checkClassExists(schoolID, classID)):
+            return "This class does not exist!"
+        if not(self.checkStudentExists(schoolID, studentID)):
+            return "This student does not exist!"
+        classSelector = { #Selects the class with a matching classID
+            'schoolID' : schoolID,
+            'classes.classID' : classID
+        }
+        self.mongo.db.school.update(classSelector, { #Add student to class's student list
+            '$pull' : {
+                'classes.$.students' : studentID
+            }
+        })
+        studentSelector = { #Selects the student with a matching studentID
+            'schoolID' : schoolID,
+            'students.studentID' : studentID
+        }
+        self.mongo.db.school.update(studentSelector, {
+            '$pull' : {
+                'students.$.classes' : classID
+            }
+        })
+        return "Student removed from class."

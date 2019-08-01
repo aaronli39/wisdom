@@ -70,9 +70,8 @@ def uploadStudentCSV():
     if inputFile.filename.rsplit('.',1)[1].lower() != 'csv':
         flash('Invalid file type')
         return redirect(request.referrer)
-    flash('Upload successful')
     csv = inputFile.read().decode('utf-8')
-    dbtools.addStudentsFromCSV(session['username'], request.form['schoolID'], csv)
+    flash(dbtools.addStudentsFromCSV(session['username'], request.form['schoolID'], csv))
     return redirect(request.referrer)
 
 @app.route("/admin")
@@ -103,6 +102,23 @@ def schoolPage(schoolID):
         flash('You are not a administrator of this school!')
         return redirect('/admin')
     return render_template("schools.html", schoolData=dbtools.getSchoolInfo(schoolID))
+
+@app.route('/addClass', methods = ['POST'])
+def addClass():
+    if 'username' not in session:
+        return redirect('/login')
+    if session['userType'] != 'admin':
+        flash('You are not a administrator!')
+        redirect('/admin')
+    flash(dbtools.addClass(session['username'], request.form['schoolID'], request.form['className']))
+    return redirect(request.referrer)
+
+@app.route('/logout')
+def logout():
+    if 'username' in session:
+        session.pop('username')
+        session.pop('userType')
+    return redirect('/')
 
 if __name__ == "__main__":
     app.debug = True
