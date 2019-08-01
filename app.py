@@ -85,9 +85,16 @@ def createClass():
     if session['userType'] != 'admin':
         flash('You are not a administrator!')
         return redirect('/admin')
+    if request.form['schoolName'] == '':
+        flash('No school name given')
+        return redirect('/admin')
     dbtools.registerSchool(session['username'], request.form['schoolName'])
     flash('Registration successful')
     return redirect('/admin')
+
+@app.route("/school/<schoolID>")
+def schoolPage(schoolID):
+    return schoolID
 
 if __name__ == "__main__":
     app.debug = True
