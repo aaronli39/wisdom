@@ -262,7 +262,7 @@ class DBTools:
             'classes.classID' : classID
         }
         studentLst = None
-        for i in self.mongo.db.school.find(classSelector, {'classes.students' : 1}).limit(1):
+        for i in self.mongo.db.school.find(classSelector, {'classes' : {'$elemMatch' : {'classID' : classID}}}).limit(1):
             studentLst = i['classes'][0]['students']
         for studentID in studentLst:
             self.removeStudentFromClass(username, schoolID, studentID, classID, skipChecks = True)
@@ -274,3 +274,11 @@ class DBTools:
             }
         })
         return "Class deleted."
+    
+    def getClassInfo(self, username, schoolID, classID):
+        classSelector = { #Selects the class with a matching classID
+            'schoolID' : schoolID,
+            'classes.classID' : classID
+        }
+        for i in self.mongo.db.school.find(classSelector, {'_id' : 0, 'classes' : {'$elemMatch' : {'classID' : classID}}}).limit(1):
+            return i['classes'][0]
