@@ -74,9 +74,16 @@ def uploadStudentCSV():
 def admin():
     return render_template("admin_home.html")
 
-@app.route("/createSchool")
+@app.route("/createSchool", methods = ["POST"])
 def createClass():
-    return render_template("createSchool.html")
+    if 'username' not in session:
+        return redirect('/login')
+    if session['userType'] != 'admin':
+        flash('You are not a administrator!')
+        return redirect('/admin')
+    dbtools.registerSchool(session['username'], request.form['schoolName'])
+    flash('Registration successful')
+    return redirect('/admin')
 
 if __name__ == "__main__":
     app.debug = True
