@@ -136,10 +136,13 @@ if __name__ == "__main__":
     if REPL_MODE:
         while True:
             try:
-                userInput = input('>>>')
+                userInput = input('>>> ')
                 if userInput == 'quit':
                     break
                 print(eval(userInput))
+            except KeyboardInterrupt:
+                print()
+                break
             except:
                 print_exc()
     else:
