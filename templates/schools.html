@@ -3,6 +3,7 @@
 
 {% block head %}
 <meta id="my-data" data-name='{{ schoolData | tojson | safe }}'>
+<meta id="sData" data-name='{{ schoolData | tojson | safe }}'>
 {% endblock %}
 
 {% block body %}
@@ -98,6 +99,29 @@
         </div>
 
     </div>
+    <div class="row mt-3">
+
+        <div class="col text-center">
+            <h3 style="text-align: left;">View student schedule</h3>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="enter student name"
+                    aria-label="college_name" aria-describedby="button-addon2" name="search2" id="search_button2"
+                    onkeyup="suggest2()">
+                <div class="input-group-append">
+                    <button class="btn btn-outline-dark" type="submit" id="submit2">Search</button>
+                </div>
+            </div>
+            <div class="text-left">
+                <ul id="suggestions2" class="pl-0">
+                </ul>
+
+                <ul id="classList" class="pl-0">
+                    
+                </ul>
+            </div>
+        </div>
+
+    </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
@@ -108,4 +132,5 @@
     });
 </script>
 <script src="../static/index.js"></script>
+<script src="../static/index2.js"></script>
 {% endblock %}

@@ -38,3 +38,20 @@ input.form-control.search.expanded {
 #suggestions > a:hover {
     background-color: lightgray;
 }
+
+#suggestions2 {
+    list-style-type: none;
+}
+
+#suggestions2 > li {
+    border: 1px solid gainsboro;
+    /* background-color: gainsboro; */
+    min-width: 100%;
+    padding-left: 0.8em;
+    padding-top: 0.2em;
+    border-radius: 0px !important;
+}
+
+#suggestions2 > li:hover {
+    background-color: lightgray;
+}

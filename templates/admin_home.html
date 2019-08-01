@@ -64,7 +64,8 @@
                             <div class="d-flex justify-content-between">
                                 <a href="/school/{{ j[1] }}" class="btn btn-success">Open</a>
                                 <button id="b1" class="btn btn-warning" type="button">Delete</button>
-                                <a id="b2" href="/deleteSchool/{{ j[1] }}" class="btn btn-danger" style="display: none;">Confirm</a>
+                                <a id="b2" href="/deleteSchool/{{ j[1] }}" class="btn btn-danger"
+                                    style="display: none;">Confirm</a>
                             </div>
                         </div>
                     </div>
@@ -78,10 +79,8 @@
         </div>
 
     </div>
-
-</div>
 <script>
-    document.getElementById("b1").addEventListener("click", function(e) {
+    document.getElementById("b1").addEventListener("click", function (e) {
         this.style.display = "none";
         document.getElementById("b2").style.display = "block";
     })
