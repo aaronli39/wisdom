@@ -1,5 +1,6 @@
 import json
 from os import urandom
+from traceback import print_exc
 
 from flask import Flask, request, render_template, redirect, flash, session
 from util import Database
@@ -139,8 +140,8 @@ if __name__ == "__main__":
                 if userInput == 'quit':
                     break
                 print(eval(userInput))
-            except Exception as e:
-                print(e)
+            except:
+                print_exc()
     else:
         app.debug = True
         app.run()
