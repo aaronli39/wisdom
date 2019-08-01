@@ -94,7 +94,7 @@ def createClass():
 
 @app.route("/school/<schoolID>")
 def schoolPage(schoolID):
-    return schoolID
+    return render_template("schools.html", schoolName=dbtools.getSchoolInfo(schoolID))
 
 if __name__ == "__main__":
     app.debug = True

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block title %} {{ schoolName["schoolName"] }} {% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <a class="navbar-brand special" href="/">
+        <img src="../static/logo3.png" width="30" height="30" class="d-inline-block align-top" alt="">
+        Wisdom</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav ml-auto">
+        </div>
+    </div>
+</nav>
+
+<div class="row mt-5">
+
+    <div class="col">
+        <h4>Generate Student info from CSV</h4>
+        <!-- <button class="btn btn-primary">Here</button> -->
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <div class="alert alert-primary">
+            {% for message in messages %}
+            {{ message }}
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+        <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
+            <div class="input-group">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
+                    <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <button id="filer" class="btn btn-outline-dark" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+<div class="row mt-5">
+
+    <div class="col">
+        <form action="/addClass">
+            <label for="className">Add a class</label>
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" placeholder="enter class name" required>
+                <div class="input-group-append">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-dark" type="submit">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+{% endblock %}

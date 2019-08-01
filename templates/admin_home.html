@@ -15,9 +15,6 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav ml-auto">
-                <a class="nav-item nav-link" href="#home">Home</a>
-                <a class="nav-item nav-link" href="#features">Features</a>
-                <a class="nav-item nav-link" href="#about">About</a>
             </div>
         </div>
     </nav>
@@ -27,52 +24,6 @@
             <h1>
                 Welcome, {{username}}
             </h1>
-        </div>
-    </div>
-
-    <div class="row mt-5">
-
-        <div class="col">
-            <h4>Generate Student info from CSV</h4>
-            <!-- <button class="btn btn-primary">Here</button> -->
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <div class="alert alert-primary">
-                {% for message in messages %}
-                {{ message }}
-                {% endfor %}
-            </div>
-            {% endif %}
-            {% endwith %}
-            <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
-                <div class="input-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
-                        <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
-                    </div>
-                    <div class="input-group-append">
-                        <button id="filer" class="btn btn-outline-dark" type="submit">Submit</button>
-                    </div>
-                </div>
-            </form>
-        </div>
-
-    </div>
-
-    <div class="row mt-5">
-
-        <div class="col">
-            <form action="/addClass">
-                <label for="className">Add a class</label>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="enter class name">
-                    <div class="input-group-append">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-dark" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
 
@@ -86,9 +37,11 @@
                 <div class="d-flex justify-content-right">
                     <form action="/createSchool" method="POST">
                         <div class="input-group">
-                            <input type="text" name="schoolName" class="form-control align-self-center mr-3" placeholder="enter school name">
+                            <input type="text" name="schoolName" class="form-control align-self-center mr-3"
+                                placeholder="enter school name">
                             <div class="input-group-append">
-                                <button class="btn btn-dark mt-2 mb-2" id="creating" type="submit">Create School</button>
+                                <button class="btn btn-dark mt-2 mb-2" id="creating" type="submit">Create
+                                    School</button>
                             </div>
                         </div>
                     </form>
@@ -110,19 +63,6 @@
                             <p class="card-text">With supporting text below as a natural lead-in to additional content.
                             </p>
                             <a href="/school/{{ j[1] }}" class="btn btn-primary">Open</a>
-                        </div>
-                    </div>
-                    <div class="card mr-2 ml-2" style="width: 100%;">
-                        <a href="/class/{{j[0]}}">
-                            <div class="card-img-caption">
-                                <p id="caption-text2" class="card-text">{{ j[1] }}</p>
-                                <img class="card-img-top" src="../static/card_background2.jpeg" alt="Card image cap">
-                            </div>
-                        </a>
-
-                        <div class="card-body">
-                            <h5 class="card-title">Course Description</h5>
-                            <p class="card-text">{{ j[2] | safe }}</p>
                         </div>
                     </div>
                 </div>
