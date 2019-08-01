@@ -15,6 +15,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav ml-auto">
+                <a class="nav-item nav-link" href="/logout">Logout</a>
             </div>
         </div>
     </nav>
@@ -57,12 +58,14 @@
             <div class="row mt-3 ml-3 mr-3">
                 {% for j in managed[i * 4: i * 4 + 4] %}
                 <div class="col-md-3">
-                    <div class="card w-75">
+                    <div class="card w-100">
                         <div class="card-body">
                             <h5 class="card-title">{{ j[0] }}</h5>
-                            <p class="card-text">With supporting text below as a natural lead-in to additional content.
-                            </p>
-                            <a href="/school/{{ j[1] }}" class="btn btn-primary">Open</a>
+                            <div class="d-flex justify-content-between">
+                                <a href="/school/{{ j[1] }}" class="btn btn-success">Open</a>
+                                <button id="b1" class="btn btn-warning" type="button">Delete</button>
+                                <a id="b2" href="/deleteSchool/{{ j[1] }}" class="btn btn-danger" style="display: none;">Confirm</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -78,22 +81,9 @@
 
 </div>
 <script>
-    $('.custom-file-input').on('change', function () {
-        var fileName = $(this).val();
-        fileName = fileName.substring(12);
-        $(this).next('.form-control-file').addClass("selected").html(fileName);
-    });
-
-    // $('#creating').click(function () {
-    //     console.log("adsf");
-    //     var el = $("#creating");
-    //     $('.search').toggleClass('expanded');
-    //     $('#creating').toggleClass('fa-times');
-    //     // $("#creating").hide();
-    //     $("#creating").html("Submit");
-    //     // el.attr("type", "submit");
-    //     // $("#creating2").css("display", "block");
-    // });
+    document.getElementById("b1").addEventListener("click", function(e) {
+        this.style.display = "none";
+        document.getElementById("b2").style.display = "block";
+    })
 </script>
-
 {% endblock %}

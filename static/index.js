@@ -3,17 +3,24 @@ function suggest() {
     var input, filter, i;
     input = document.getElementById("search_button").value;
     input = input.charAt(0).toUpperCase() + input.slice(1);
+    console.log(input.innerHTML);
     ctr = 0;
-    var class_names = document.getElementById("my-data").data;
-    console.log(class_names);
+    var schoolData = $("#my-data").attr("data-name");
+    schoolData = JSON.parse(schoolData);
+    class_names = schoolData["classes"];
+    var schoolID = schoolData['schoolID'];
+    // console.log(class_names[0]);
     //remove any existing list items
     $("#suggestions").empty();
     //add appropriate list items
     if (class_names.length == 0) {
         $("#suggestions").append("<li>You have no classes, go add one!</li>");
-    } for (i = 0; i < class_names.length; i++) {
-        if (class_names[i].toUpperCase().indexOf(filter) > -1) {
-            d3.select("#suggestions").insert("li").text(class_names[i]);
+    } 
+    console.log(class_names[0]);
+    for (i = 0; i < class_names.length; i++) {
+        // console.log(class_names.length);
+        if ((class_names[i]["className"].charAt(0).toUpperCase() + class_names[i]["className"].slice(1)).indexOf(input) > -1) {
+            $("#suggestions").append("<a>" + class_names[i]["className"] + "</a>").attr("href", "/school/" + schoolID + "/class/" + class_names[i][0] );
             ctr++;
         }
         //cut off at 5 list items
@@ -21,13 +28,14 @@ function suggest() {
             break;
         }
     }
-    
     //when user clicks a list item, change the search field to that item
     var clist = document.getElementsByTagName("li");
-    for (i = 1; i < clist.length; i++) {
-        clist[i].addEventListener('click', function () {
-            console.log(this);
-            input.value = this.innerText;
+    // console.log(clist);
+    for (i = 0; i < clist.length; i++) {
+        clist[i].addEventListener('click', function (e) {
+            // console.log(document.getElementById("search_button").value);
+            // $("suggestions").value
+            document.getElementById("search_button").value = this.innerHTML;
         });
     }
 };

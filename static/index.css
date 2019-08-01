@@ -26,12 +26,15 @@ input.form-control.search.expanded {
     list-style-type: none;
 }
 
-#suggestions > li {
+#suggestions > a {
     border: 1px solid gainsboro;
+    background-color: gainsboro;
+    min-width: 100%;
     padding-left: 0.8em;
-    padding-top: 0.3em;
+    padding-top: 0.2em;
+    border-radius: 0px !important;
 }
 
-#suggestions > li:hover {
-    background-color: gainsboro;
+#suggestions > a:hover {
+    background-color: lightgray;
 }

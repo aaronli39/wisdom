@@ -198,7 +198,7 @@ class DBTools:
         return self.mongo.db.school.find(authCheck).limit(1).count() != 0
     
     def getSchoolInfo(self, schoolID):
-        for i in self.mongo.db.school.find({'schoolID' : schoolID}).limit(1):
+        for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0}).limit(1):
             return i
     
     def getBasicSchoolInfo(self, username):

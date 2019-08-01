@@ -2,7 +2,7 @@
 {% block title %} Welcome | {{ schoolData["schoolName"] }} {% endblock %}
 
 {% block head %}
-<meta id="my-data" data-name="{{ schoolData["classes"] }}">
+<meta id="my-data" data-name='{{ schoolData | tojson | safe }}'>
 {% endblock %}
 
 {% block body %}
@@ -17,6 +17,7 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
         <div class="navbar-nav ml-auto">
             <a class="nav-item nav-link active" href="#">{{ schoolData["schoolName"] }} </a>
+            <a class="nav-item nav-link" href="/logout">Logout</a>
         </div>
     </div>
 </nav>
@@ -62,7 +63,7 @@
     <div class="row mt-5">
 
         <div class="col">
-            <form action="/addClass">
+            <form action="/addClass" method="POST">
                 <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                 <label for="className">Add a class</label>
                 <div class="input-group mb-3">
@@ -77,12 +78,13 @@
         </div>
 
     </div>
+    <hr>
     <div class="row mt-3">
 
-        <div class="col-md-2"></div>
         <div class="col text-center">
+            <h3 style="text-align: left;">Search for a class</h3>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="enter college name(tuition data)"
+                <input type="text" class="form-control" placeholder="enter class name"
                     aria-label="college_name" aria-describedby="button-addon2" name="search" id="search_button"
                     onkeyup="suggest()">
                 <div class="input-group-append">
@@ -91,13 +93,20 @@
             </div>
             <div class="text-left">
                 <ul id="suggestions" class="pl-0">
+                    <a href="/" class="btn text-left">sdf</a>
                 </ul>
             </div>
         </div>
-        <div class="col-md-2"></div>
 
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script>
+    $('.custom-file-input').on('change', function () {
+        var fileName = $(this).val();
+        fileName = fileName.substring(12);
+        $(this).next('.form-control-file').addClass("selected").html(fileName);
+    });
+</script>
 <script src="../static/index.js"></script>
 {% endblock %}
