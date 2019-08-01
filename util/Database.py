@@ -205,3 +205,4 @@ class DBTools:
         for currID in schoolIDs:
             currSchool = self.getSchoolInfo(currID)
             output.append([currSchool['schoolName'], currID, len(currSchool['students'])])
+        return output

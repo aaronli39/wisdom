@@ -11,8 +11,7 @@ body {
 }
 
 input.form-control.search.expanded {
-    border-radius: 0;
-    width: 300px;
+    width: 15em;
 }
 
 .search.expanded {

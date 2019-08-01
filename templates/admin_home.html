@@ -81,11 +81,17 @@
         <div class="col">
             <div class="d-flex justify-content-between mb-3">
                 <div class="">
-                    <h3>Schools You Manage</h3>
+                    <h4>Schools You Manage</h4>
                 </div>
                 <div class="d-flex justify-content-right">
-                    <input type="text" class="form-control search align-self-center mr-3" placeholder="enter class name">
-                    <button class="btn btn-dark mt-2 mb-2" id="creating">Create School</button>
+                    <form action="/createSchool" method="POST">
+                        <div class="input-group">
+                            <input type="text" name="schoolName" class="form-control align-self-center mr-3" placeholder="enter school name">
+                            <div class="input-group-append">
+                                <button class="btn btn-dark mt-2 mb-2" id="creating" type="submit">Create School</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
             {% set manage = managed %}
@@ -138,13 +144,16 @@
         $(this).next('.form-control-file').addClass("selected").html(fileName);
     });
 
-    $('#creating').click(function () {
-        console.log("adsf");
-        var el = $("#creating");
-        $('.search').toggleClass('expanded');
-        $('#creating').toggleClass('fa-times');
-        $("#creating").html("Submit");
-    });
+    // $('#creating').click(function () {
+    //     console.log("adsf");
+    //     var el = $("#creating");
+    //     $('.search').toggleClass('expanded');
+    //     $('#creating').toggleClass('fa-times');
+    //     // $("#creating").hide();
+    //     $("#creating").html("Submit");
+    //     // el.attr("type", "submit");
+    //     // $("#creating2").css("display", "block");
+    // });
 </script>
 
 {% endblock %}

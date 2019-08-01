@@ -83,9 +83,10 @@ def createClass():
         return redirect('/admin')
     dbtools.registerSchool(session['username'], request.form['schoolName'])
     flash('Registration successful')
-    return redirect('/admin')
+    temp = dbtools.getBasicSchoolInfo("username")
+    print(temp, "\n\n")
+    return render_template("admin_home.html", managed=dbtools.getBasicSchoolInfo("username"))
 
 if __name__ == "__main__":
     app.debug = True
     app.run()
-
