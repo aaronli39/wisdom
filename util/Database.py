@@ -212,7 +212,7 @@ class DBTools:
     
     def deleteSchool(self, username, schoolID):
         if not(self.checkAdmin(schoolID, username)):
-            return 'User is not an admin of this school!'
+            return 'You are not a administrator of this school!'
         self.mongo.db.school.remove({'schoolID' : schoolID}, True)
         return "School deleted."
     

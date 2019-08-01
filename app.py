@@ -125,6 +125,16 @@ def addClass():
     flash(dbtools.addClass(session['username'], request.form['schoolID'], request.form['className']))
     return redirect(request.referrer)
 
+@app.route('/deleteSchool/<schoolID>')
+def deleteSchool(schoolID):
+    if 'username' not in session:
+        return redirect('/login')
+    if session['userType'] != 'admin':
+        flash('You are not a administrator!')
+        return redirectByUserType(session['userType'])
+    flash(dbtools.deleteSchool(session['username'], schoolID))
+    return redirect('/admin')
+
 @app.route('/logout')
 def logout():
     if 'username' in session:
