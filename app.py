@@ -56,6 +56,8 @@ def reg():
 
 @app.route("/uploadStudentCSV", methods = ['POST'])
 def uploadStudentCSV():
+    if 'username' not in session:
+        return redirect('/login')
     if 'inputCSV' not in request.files:
         flash('No file part')
         return redirect('/admin')
@@ -72,7 +74,9 @@ def uploadStudentCSV():
 
 @app.route("/admin")
 def admin():
-    return render_template("admin_home.html")
+    if 'username' not in session:
+        return redirect('/login')
+    return render_template("admin_home.html", username = session['username'])
 
 @app.route("/createSchool", methods = ["POST"])
 def createClass():
