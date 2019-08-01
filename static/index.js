@@ -5,13 +5,14 @@ function suggest() {
     filter = input.value.toUpperCase();
     //get list of college names
     ctr = 0;
-    var college_names = colleges['college_names'];
+    var class_names = $("my-data").data;
+    console.log(class_names);
     //remove any existing list items
     d3.select("#suggestions").selectAll("li").remove();
     //add appropriate list items
-    for (i = 0; i < college_names.length; i++) {
-        if (college_names[i].toUpperCase().indexOf(filter) > -1) {
-            d3.select("#suggestions").insert("li").text(college_names[i]);
+    for (i = 0; i < class_names.length; i++) {
+        if (class_names[i].toUpperCase().indexOf(filter) > -1) {
+            d3.select("#suggestions").insert("li").text(class_names[i]);
             ctr++;
         }
         //cut off at 5 list items
