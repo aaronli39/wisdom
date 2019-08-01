@@ -206,3 +206,8 @@ class DBTools:
             currSchool = self.getSchoolInfo(currID)
             output.append([currSchool['schoolName'], currID, len(currSchool['students'])])
         return output
+    
+    def deleteSchool(self, username, schoolID):
+        if not(self.checkAdmin(schoolID, username)):
+            return 'User is not an admin of this school!'
+        self.mongo.db.school.remove({'schoolID' : schoolID}, True)
