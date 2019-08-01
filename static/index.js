@@ -3,10 +3,10 @@ function suggest() {
     var input, filter, i;
     input = document.getElementById("search_button").value;
     input = input.charAt(0).toUpperCase() + input.slice(1);
-    console.log(input.innerHTML);
     ctr = 0;
     var schoolData = $("#my-data").attr("data-name");
     schoolData = JSON.parse(schoolData);
+    console.log(schoolData);
     class_names = schoolData["classes"];
     var schoolID = schoolData['schoolID'];
     // console.log(class_names[0]);
@@ -20,7 +20,8 @@ function suggest() {
     for (i = 0; i < class_names.length; i++) {
         // console.log(class_names.length);
         if ((class_names[i]["className"].charAt(0).toUpperCase() + class_names[i]["className"].slice(1)).indexOf(input) > -1) {
-            $("#suggestions").append("<a>" + class_names[i]["className"] + "</a>").attr("href", "/school/" + schoolID + "/class/" + class_names[i][0] );
+            var temp = "/school/" + schoolID + "/class/" + class_names[i]["classID"];
+            $("#suggestions").append("<a class='btn' href=" + temp + " style='text-align: left; margin-top: 0.2em;'>" + class_names[i]["className"] + "</a>");
             ctr++;
         }
         //cut off at 5 list items
