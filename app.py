@@ -5,6 +5,7 @@ from flask import Flask, request, render_template, redirect, flash, session
 from util import Database
 
 ALLOWED_EXTENSIONS = {'csv'}
+REPL_MODE = False
 
 config = json.load(open("config/mongo.json"))
 
@@ -131,5 +132,15 @@ def logout():
     return redirect('/')
 
 if __name__ == "__main__":
-    app.debug = True
-    app.run()
+    if REPL_MODE:
+        while True:
+            try:
+                userInput = input('>>>')
+                if userInput == 'quit':
+                    break
+                print(eval(userInput))
+            except Exception as e:
+                print(e)
+    else:
+        app.debug = True
+        app.run()
