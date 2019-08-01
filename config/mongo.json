@@ -1,4 +1,4 @@
 {
-    "databaseName" : "Wisdom",
-    "mongoURI" : "<URI>"
+    "databaseName": "Wisdom",
+    "mongoURI": "mongodb+srv://admin:Y15m6wrVh9HHm7sv@wisdom-fvs79.mongodb.net/Wisdom?retryWrites=true&w=majority"
 }
