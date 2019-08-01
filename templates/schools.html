@@ -46,7 +46,7 @@
             {% endwith %}
             <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
                 <div class="input-group">
-                    <input type="hidden" name="schoolID" value="{{schoolName['schoolID']}}">
+                    <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
                         <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
@@ -63,7 +63,7 @@
 
         <div class="col">
             <form action="/addClass">
-                <input type="hidden" name="schoolID" value="{{schoolName['schoolID']}}">
+                <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                 <label for="className">Add a class</label>
                 <div class="input-group mb-3">
                     <input type="text" class="form-control" placeholder="enter class name" name="className" required>
