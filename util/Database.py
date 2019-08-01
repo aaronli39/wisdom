@@ -33,6 +33,7 @@ class DBTools:
         self.mongo.db.admin.update({ 'username' : username }, { #Add school to user's school list
             '$push' : {'schools' : schoolID}
         })
+        return "School registered."
     
     def addStudent(self, username, schoolID, studentName, studentID, skipAdminCheck = False):
         if not(skipAdminCheck):
@@ -213,6 +214,14 @@ class DBTools:
     def deleteSchool(self, username, schoolID):
         if not(self.checkAdmin(schoolID, username)):
             return 'You are not a administrator of this school!'
+        for school in self.mongo.db.school.find({'schoolID' : schoolID}).limit(1):
+            for admin in school['admins']: #Removes schoolID for all admins
+                print(admin)
+                self.mongo.db.admin.update({'username' : admin}, {
+                    '$pull' : {
+                        'schools' : schoolID
+                    }
+                })
         self.mongo.db.school.remove({'schoolID' : schoolID}, True)
         return "School deleted."
     
