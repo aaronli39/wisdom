@@ -113,7 +113,7 @@ def schoolPage(schoolID):
     if not(dbtools.checkAdmin(schoolID, session['username'])):
         flash('You are not a administrator of this school!')
         return redirectByUserType(session['userType'])
-    return render_template("schools.html", schoolData=dbtools.getSchoolInfo(schoolID))
+    return render_template("schools.html", schoolData=dbtools.getSchoolInfo(schoolID), username = session['username'])
 
 @app.route('/addClass', methods = ['POST'])
 def addClass():

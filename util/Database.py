@@ -216,7 +216,6 @@ class DBTools:
             return 'You are not a administrator of this school!'
         for school in self.mongo.db.school.find({'schoolID' : schoolID}).limit(1):
             for admin in school['admins']: #Removes schoolID for all admins
-                print(admin)
                 self.mongo.db.admin.update({'username' : admin}, {
                     '$pull' : {
                         'schools' : schoolID
