@@ -16,19 +16,21 @@ app.config["SECRET_KEY"] = urandom(32)
 
 dbtools = Database.DBTools(app)
 
+def redirectByUserType(userType):
+    if userType == 'admin':
+        return redirect('/admin')
+    elif userType == 'student':
+        return redirect('/student')
+
 @app.route("/")
 def index():
     return render_template("landing.html")
 
 @app.route("/login", methods = ["GET", "POST"])
 def log():
-    if request.method == "GET":
-        if 'username' in session:
-            if session['userType'] == 'admin':
-                return redirect('/admin')
-        return render_template('login.html')
     if 'username' in session:
-        flash('Already logged in!')
+        return redirectByUserType(session['userType'])
+    if request.method == "GET":
         return render_template('login.html')
     inputPass = request.form['pass']
     inputUsername = request.form['username']
@@ -60,6 +62,7 @@ def uploadStudentCSV():
         return redirect('/login')
     if session['userType'] != 'admin':
         flash('You are not a administrator!')
+        return redirectByUserType(session['userType'])
     if 'inputCSV' not in request.files:
         flash('No file part')
         return redirect(request.referrer)
@@ -80,13 +83,20 @@ def admin():
         return redirect('/login')
     return render_template("admin_home.html", username = session['username'], managed = dbtools.getBasicSchoolInfo(session['username']))
 
+@app.route('/student')
+def student():
+    if 'username' not in session:
+        return redirect('/login')
+    return "Some student page"
+    
+
 @app.route("/createSchool", methods = ["POST"])
 def createClass():
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
         flash('You are not a administrator!')
-        return redirect('/admin')
+        return redirectByUserType(session['userType'])
     if request.form['schoolName'] == '':
         flash('No school name given')
         return redirect('/admin')
@@ -100,7 +110,7 @@ def schoolPage(schoolID):
         return redirect('/login')
     if not(dbtools.checkAdmin(schoolID, session['username'])):
         flash('You are not a administrator of this school!')
-        return redirect('/admin')
+        return redirectByUserType(session['userType'])
     return render_template("schools.html", schoolData=dbtools.getSchoolInfo(schoolID))
 
 @app.route('/addClass', methods = ['POST'])
@@ -109,7 +119,7 @@ def addClass():
         return redirect('/login')
     if session['userType'] != 'admin':
         flash('You are not a administrator!')
-        redirect('/admin')
+        return redirectByUserType(session['userType'])
     flash(dbtools.addClass(session['username'], request.form['schoolID'], request.form['className']))
     return redirect(request.referrer)
 
