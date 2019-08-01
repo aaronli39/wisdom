@@ -113,6 +113,13 @@ def addClass():
     flash(dbtools.addClass(session['username'], request.form['schoolID'], request.form['className']))
     return redirect(request.referrer)
 
+@app.route('/logout')
+def logout():
+    if 'username' in session:
+        session.pop('username')
+        session.pop('userType')
+    return redirect('/')
+
 if __name__ == "__main__":
     app.debug = True
     app.run()
