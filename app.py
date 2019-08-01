@@ -148,6 +148,16 @@ def classRoute(schoolID, classID):
         return redirect('/login')
     return render_template('class.html', schoolID = schoolID, classID = classID)
 
+@app.route('/addAdmin', methods=['POST'])
+def addAdmin():
+    if 'username' not in session:
+        return redirect('/login')
+    if session['userType'] != 'admin':
+        flash('You are not a administrator!')
+        return redirectByUserType(session['userType'])
+    flash(dbtools.addAdmin(session['username'], request.form['schoolID'], request.form['adminUsername']))
+    return redirect(request.referrer)
+
 if __name__ == "__main__":
     if REPL_MODE:
         while True:

@@ -81,7 +81,7 @@ class DBTools:
             'schools' : schoolID
         }
         if self.mongo.db.admin.find(adminCheck).limit(1).count() == 0:
-            return "User is not an admin of this school!"
+            return "You are not a administrator of this school!"
         if self.checkAdmin(schoolID, adminUsername):
             return "This user is already an admin!"
         self.mongo.db.school.update({'schoolID' : schoolID}, { #Add user to admins list
