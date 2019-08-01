@@ -21,3 +21,17 @@ input.form-control.search.expanded {
 .nav-categories {
     margin-left: 15px;
 }
+
+#suggestions {
+    list-style-type: none;
+}
+
+#suggestions > li {
+    border: 1px solid gainsboro;
+    padding-left: 0.8em;
+    padding-top: 0.3em;
+}
+
+#suggestions > li:hover {
+    background-color: gainsboro;
+}
