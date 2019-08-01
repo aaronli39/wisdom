@@ -28,7 +28,24 @@
         <div class="col">
             <h4 style="font-size: 3rem;">Hello Admin, here's what you can do:</h4>
         </div>
+<<<<<<< HEAD
 
+=======
+        {% endif %}
+        {% endwith %}
+        <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
+            <div class="input-group">
+                <input type="hidden" name="schoolID" value="{{schoolName['schoolID']}}">
+                <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
+                    <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
+                </div>
+                <div class="input-group-append">
+                    <button id="filer" class="btn btn-outline-dark" type="submit">Submit</button>
+                </div>
+            </div>
+        </form>
+>>>>>>> 8d1e4eab79f9541278f88043cd19122676a44428
     </div>
     <hr>
     <div class="row mt-5">
