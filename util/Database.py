@@ -211,3 +211,30 @@ class DBTools:
         if not(self.checkAdmin(schoolID, username)):
             return 'User is not an admin of this school!'
         self.mongo.db.school.remove({'schoolID' : schoolID}, True)
+    
+    def removeStudentFromClass(self, username, schoolID, studentID, classID):
+        if not(self.checkAdmin(schoolID, username)):
+            return 'User is not an admin of this school!'
+        if not(self.checkClassExists(schoolID, classID)):
+            return "This class does not exist!"
+        if not(self.checkStudentExists(schoolID, studentID)):
+            return "This student does not exist!"
+        classSelector = { #Selects the class with a matching classID
+            'schoolID' : schoolID,
+            'classes.classID' : classID
+        }
+        self.mongo.db.school.update(classSelector, { #Add student to class's student list
+            '$pull' : {
+                'classes.$.students' : studentID
+            }
+        })
+        studentSelector = { #Selects the student with a matching studentID
+            'schoolID' : schoolID,
+            'students.studentID' : studentID
+        }
+        self.mongo.db.school.update(studentSelector, {
+            '$pull' : {
+                'students.$.classes' : classID
+            }
+        })
+        return "Student removed from class."
