@@ -172,6 +172,8 @@ def createClass():
 def schoolPage(schoolID):
     if 'username' not in session:
         return redirect('/login')
+    if session['userType'] != 'admin':
+        return redirectByUserType(session['userType'])
     if not (dbtools.checkAdmin(schoolID, session['username'])):
         flash('You are not a administrator of this school!')
         return redirectByUserType(session['userType'])
