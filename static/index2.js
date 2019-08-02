@@ -16,13 +16,18 @@ function suggest2() {
     //add appropriate list items
     if (student_names.length == 0) {
         $("#suggestions2").append("<li>You have no students, go add one!</li>");
-    } 
+    }
     for (i = 0; i < student_names.length; i++) {
         // console.log(student_names.length);
         temp = student_names[i]["name"][1].toLowerCase() + ", " + student_names[i]["name"][0].toLowerCase();
         if (temp.indexOf(input) > -1) {
             $("#suggestions2").append("<li class='b2'>" + student_names[i]["name"][1] + ", " + student_names[i]["name"][0] + "</li>");
             ctr++;
+            // counter++;
+            console.log(counter);
+        } else if (ctr == 0){
+            $("#suggestions2").append("<li>No results</li>");
+            return;
         }
         //cut off at 5 list items
         if (ctr == 5) {
