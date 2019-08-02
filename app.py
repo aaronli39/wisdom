@@ -121,6 +121,7 @@ def student():
         return redirect('/login')
     temp = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])
     print(temp, "\n\n")
+    dbtools.
     return render_template("student.html")
 
 

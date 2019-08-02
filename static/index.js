@@ -21,7 +21,7 @@ function suggest() {
         // console.log(class_names.length);
         if ((class_names[i]["className"].charAt(0).toUpperCase() + class_names[i]["className"].slice(1)).indexOf(input) > -1) {
             var temp = "/school/" + schoolID + "/class/" + class_names[i]["classID"];
-            $("#suggestions").append("<a class='btn' href=" + temp + " style='text-align: left; margin-top: 0.2em;'>" + class_names[i]["className"] + "</a>");
+            $("#suggestions").append("<a class='btn' href=" + temp + " style='text-align: left; margin-top: 0.2em;'>" + class_names[i]["className"] + " (" + class_names[i]['classID'] + ")</a>");
             ctr++;
         }
         //cut off at 5 list items

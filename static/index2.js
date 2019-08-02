@@ -21,7 +21,7 @@ function suggest2() {
         // console.log(student_names.length);
         temp = student_names[i]["name"][1].toLowerCase() + ", " + student_names[i]["name"][0].toLowerCase();
         if (temp.indexOf(input) > -1) {
-            $("#suggestions2").append("<li class='b2'>" + student_names[i]["name"][1] + ", " + student_names[i]["name"][0] + "</li>");
+            $("#suggestions2").append("<li class='b2'>" + student_names[i]["name"][1] + ", " + student_names[i]["name"][0] + ' (' + student_names[i]['studentID'] + ")</li>");
             ctr++;
             // counter++;
             console.log(counter);
