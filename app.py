@@ -23,6 +23,8 @@ def redirectByUserType(userType):
         return redirect('/admin')
     elif userType == 'student':
         return redirect('/student')
+    elif userType == 'teacher':
+        return redirect('/teacher')
 
 @app.route("/")
 def index():
@@ -51,6 +53,13 @@ def log():
             session['userType'] = 'student'
             session['schoolID'] = request.form['schoolid']
             return redirect('/student')
+        elif dbtools.authTeacher(inputUsername, inputPass, request.form['schoolid']):
+            session['username'] = inputUsername
+            session['userType'] = 'teacher'
+            session['schoolID'] = request.form['schoolid']
+            return redirect('/teacher')
+        else:
+            flash('invalid username or password.')
     return render_template('login.html')
 
 @app.route("/register", methods = ['GET', 'POST'])
@@ -103,8 +112,8 @@ def student():
 def changePass():
     if 'username' not in session:
         return redirect('/login')
-    if session['userType'] == 'student':
-        if dbtools.authStudent(session['schoolID'], session['username'], request.form['oldPassword']):
+    if session['userType'] == 'student' or session['userType'] == 'teacher':
+        if dbtools.authStudent(session['schoolID'], session['username'], request.form['oldPassword']) or dbtools.authTeacher(session['schoolID'], session['username'], request.form['oldPassword']):
             flash(dbtools.changePassword(session['username'], request.form['newPassword'], session['schoolID']))
         else:
             flash("Incorrect password")
