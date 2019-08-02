@@ -87,10 +87,33 @@
                 </div>
             </form>
         </div>
+        
+    </div>
+    <div class="row">
+
+        <div class="col">
+            <form action="/addStu">
+                <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
+                <label for="className">Add student to class</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Enter class name" name="className" required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <input type="text" class="form-control" placeholder="Enter student name" name="sName" required>
+                        </div>
+                    </div>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
     </div>
     <div class="row mt-5">
-
+        
         <div class="col text-center">
             <h3 style="text-align: left;" class="underline">Search for a class</h3>
             <div class="input-group">
