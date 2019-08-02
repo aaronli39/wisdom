@@ -12,6 +12,7 @@ function suggest2() {
     // console.log(student_names[0]);
     //remove any existing list items
     $("#suggestions2").empty();
+    $("#classList").empty();
     //add appropriate list items
     if (student_names.length == 0) {
         $("#suggestions2").append("<li>You have no students, go add one!</li>");
@@ -38,16 +39,24 @@ function suggest2() {
             $("#suggestions2").empty();
             for (i = 0; i < student_names.length; i++) {
                 temp = this.innerHTML.split(", ");
-                console.log(temp);
                 var x;
                 for (x = 0; x < student_names.length; x++) {
                     if (temp[0] == student_names[x]["name"][1] && temp[1] == student_names[x]["name"][0]) {
-                        console.log(student_names[x]["name"][0] == temp[1]);
-                        // $("#classList").value = student_names[x]["name"]
+                        console.log(student_names[x]["name"]);
+                        var lis = document.getElementById("classList");
+                        var z;
+                        if (student_names[x]["classes"].length == 0) {
+                            $("#classList").append("<li>This student has no classes</li>");
+                            return;
+                        } else {
+                            for (z = 0; z < student_names[x]["classes"]; z++) {
+                                $("#classList").append("<li>" + student_names[x]["classes"][z] + "</li>");
+                            }
+                        }
                     }
                 }
             }
-            document.getElementById("search_button2").value = this.innerHTML;
+            // document.getElementById("search_button2").value = this.innerHTML;
         });
     }
 };
