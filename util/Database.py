@@ -282,3 +282,10 @@ class DBTools:
         }
         for i in self.mongo.db.school.find(classSelector, {'_id' : 0, 'classes' : {'$elemMatch' : {'classID' : classID}}}).limit(1):
             return i['classes'][0]
+    
+    def changePassword(self, username, newPassword, schoolID = None):
+        if schoolID == None: #Modify an admin's password
+            self.mongo.db.admin.update({'username' : username}, {'$set' : {'password' : newPassword}})
+        else: #Modify student password
+            self.mongo.db.school.update({'schoolID' : schoolID, 'students.username' : username}, {'$set' : {'students.$.password' : newPassword}})
+        return "Password changed."

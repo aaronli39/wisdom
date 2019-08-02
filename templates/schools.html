@@ -86,7 +86,7 @@
                 <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                 <label for="className">Add a class</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="enter class name" name="className" required>
+                    <input type="text" class="form-control" placeholder="Enter class name" name="className" required>
                     <div class="input-group-append">
                         <div class="input-group-append">
                             <button class="btn btn-outline-dark" type="submit">Submit</button>
@@ -97,6 +97,28 @@
         </div>
     
     </div>
+    <form action="/changePass" method="POST">
+        <div class="row mt-5">
+            <div class="col">
+                <label for="oldPassword">Old Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter old password" name="oldPassword" required>
+                </div>
+            </div>
+            <div class="col">
+                <label for="newPassword">New Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter new password" name="newPassword" required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-dark" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </form>
     <hr>
     <div class="row mt-3">
 
