@@ -119,12 +119,13 @@ def admin():
 def student():
     if 'username' not in session:
         return redirect('/login')
-    classIDs = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])["classes"]
+    studentInfo = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])
+    classIDs = studentInfo["classes"]
     ret = []
     for i in classIDs:
         classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
         ret.append(classData["className"])
-    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = classIDs)
+    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = classIDs, name = studentInfo['name'][0])
 
 
 @app.route('/changePass', methods=['POST'])
@@ -225,7 +226,7 @@ def classRoute(schoolID, classID):
     if classData == None:
         flash("This class does not exist!")
         return redirectByUserType(session['userType'])
-    if session['userType'] == 'teacher' and not classData['teacher'] != session['username']:
+    if session['userType'] == 'teacher' and classData['teacher'] != session['username']:
         flash("You are not a teacher of this class!")
         return redirect('/teacher')
     if session['userType'] == 'student':
@@ -248,6 +249,18 @@ def addAdmin():
         dbtools.addAdmin(session['username'], request.form['schoolID'],
                          request.form['adminUsername']))
     return redirect(request.referrer)
+
+@app.route('/teacher')
+def teacher():
+    if 'username' not in session:
+        return redirect('/login')
+    teacherInfo = dbtools.getTeacherInfo(session['schoolID'], session['username'])
+    classIDs = teacherInfo["classes"]
+    ret = []
+    for i in classIDs:
+        classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
+        ret.append(classData["className"])
+    return render_template("teacher.html", classes = ret, schoolID = session["schoolID"], classID = classIDs, name = teacherInfo['name'][0])
 
 @app.route("/addStu", methods=["POST"])
 def addStud():
@@ -292,7 +305,8 @@ def processMakePost(schoolID, classID):
         '<div>', ' ')  #Same as above, used for compatability among browsers
     postbody = postbody.replace('</div>', '')
     duedate = None
-    due = None
+    due = "Never"
+    dueCheck = False
     if 'setDueDate' in request.form:
         dueCheck = True
     if dueCheck:  #Will insert a due date if the checkbox is checked

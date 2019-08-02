@@ -21,10 +21,50 @@
     <div class="row mt-5">
 
         <div class="col">
-            <h3>Hello student</h3>
+            <h3>Hello, {{name}}</h3>
         </div>
 
     </div>
+    <hr>
+    <div class="row mt-4">
+        <div class="col">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert alert-primary">
+                {% for message in messages %}
+                {{ message }}
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+            <h3 class="underline">Change Password</h3>
+        </div>
+
+    </div>
+    <hr>
+    <form action="/changePass" method="POST">
+        <div class="row">
+            <div class="col">
+                <label for="oldPassword">Old Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter old password" name="oldPassword"
+                        required>
+                </div>
+            </div>
+            <div class="col">
+                <label for="newPassword">New Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter new password" name="newPassword"
+                        required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-dark" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
     <hr>
     <div class="row mt-5">
 
