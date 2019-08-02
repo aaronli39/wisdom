@@ -259,9 +259,6 @@ def processMakePost(schoolID, classID):
         '<div>', ' ')  #Same as above, used for compatability among browsers
     postbody = postbody.replace('</div>', '')
     duedate = None
-    dueCheck = False
-    duetime = None
-    submittable = request.form.get('submittable')
     due = None
     if 'setDueDate' in request.form:
         dueCheck = True
@@ -269,11 +266,7 @@ def processMakePost(schoolID, classID):
         duedate = request.form['duedate']
         duetime = request.form['duetime']
         due = duedate + " " + duetime
-    if submittable == None:
-        submittable = False
-    else:
-        submittable = True
-    dbtools.makePost(schoolID, classID, due, postbody, submittable, postTitle)
+    dbtools.makePost(schoolID, classID, due, postbody, postTitle)
     #starttime = str(db.get_start_time(postID))
     # if dueCheck:
     #     event = {
