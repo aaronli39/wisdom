@@ -230,6 +230,17 @@ def addAdmin():
                          request.form['adminUsername']))
     return redirect(request.referrer)
 
+@app.route("/addStu/<schoolID>/<studentID>/classID")
+def addStu(schoolID, classID, studentID):
+    if 'username' not in session:
+        return redirect('/')
+    if session['userType'] != 'admin' and session['userType'] != 'teacher':
+        flash("User is not a teacher or admin of this class")
+        return redirect(request.referrer)
+    student = request.args.get("sName")
+    classN = request.args.get("className")
+    dbtools.addStudentClass('username', schoolID, studentID, classID)
+
 
 @app.route('/makepost/<schoolID>/<classID>')
 def makePost(classID, schoolID):
