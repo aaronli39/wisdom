@@ -216,7 +216,7 @@ def classRoute(schoolID, classID):
     classData = dbtools.getClassInfo(session["username"], schoolID, classID)
     return render_template('class.html', schoolID = schoolID, classData = classData,
                             isTeacher = session['userType'] == 'admin' or session['userType'] == 'teacher',
-                            getTeacherInfo = dbtools.getTeacherInfo, getStudentInfo = dbtools.getStudentInfo)
+                            getTeacherInfo = dbtools.getTeacherInfo, getStudentInfo = dbtools.getStudentInfo, classID = classID)
 
 @app.route('/addAdmin', methods=['POST'])
 def addAdmin():
@@ -235,7 +235,7 @@ def addAdmin():
 def makePost(classID, schoolID):
     if 'username' not in session:
         return redirect('/')
-    if session['userType'] != 'admin' or session['userType'] != 'teacher':
+    if session['userType'] != 'admin' and session['userType'] != 'teacher':
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
     date = str(datetime.date.today())
@@ -249,7 +249,7 @@ def makePost(classID, schoolID):
 def processMakePost(classID, schoolID):
     if 'username' not in session:
         return redirect('/')
-    if session['userType'] != 'admin' or session['userType'] != 'teacher':
+    if session['userType'] != 'admin' and session['userType'] != 'teacher':
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
     postTitle = request.form['postTitle']

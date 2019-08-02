@@ -12,20 +12,52 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
             integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
         <!-- custom css -->
+        <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" type="text/css">
         <link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Lobster+Two:700&display=swap" rel="stylesheet">
+        <style>
+            .special {
+                font-family: 'Lobster Two', cursive;
+            }
+        </style>
         <title>{% block title%} {% endblock %}</title>
     </head>
 
     <body id="body">
         <div class="container">
-            <div class="row mt-5">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+                <a class="navbar-brand special" href="/">
+                    <img src="{{ url_for('static', filename='logo3.png') }}" width="30" height="30" class="d-inline-block align-top"
+                        alt="">
+                    Wisdom</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                    aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div class="navbar-nav ml-auto">
+                        <a class="nav-item nav-link" href="/logout">Logout</a>
+                        <a class="nav-item nav-link" href="/logout">Logout</a>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="row mt-5 text-center">
+
+                <div class="col">
+                    <h3>Welcome, make a post below</h3>
+                </div>
+
+            </div>
+
+            <div class="row">
                 <div class="col-md-2"></div>
                 <div class="col mt-5">
 
                     {% set url = "/processmakepost/" + schoolID|string + "/" + classID|string %}
                     <form action={{url}} method="POST">
                         <div class="container">
-                            <input type="text" class="form-control" name="postTitle" placeholder="Enter a post title">
+                            <input type="text" class="form-control" name="postTitle" placeholder="Enter a post title" required>
                             <br>
                             <div class="card cardOut">
                                 <div class="card-header pt-1 pb-1 pl-2">
@@ -38,12 +70,12 @@
                                 <div class="card-body" id="textEditor" contenteditable="true"><br></div>
                             </div>
                             <input type="hidden" id="hiddenInput" name="postbody" value="">
-                            <div style="text-align:center;">
+                            <div style="text-align:center;" class="mt-2">
                                 Due Date <input id="duecheck" type="checkbox" name="setDueDate">
                                 <div id="due">
                                     Enter Due Date:<br>
-                                    <input type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
-                                    <input type="time" name="duetime"><br>
+                                    <input id="dateo" type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
+                                    <input id="timeo" type="time" name="duetime"><br>
                                 </div>
                                 <script>
                                     var check = document.getElementById("duecheck");
@@ -51,10 +83,16 @@
                                     dueInput.style.display = "none";
 
                                     var toggleDue = function () {
+                                        var date = document.getElementById("dateo");
+                                        var time = document.getElementById("timeo");
                                         if (dueInput.style.display == "none") {
                                             dueInput.style.display = "block";
+                                            time.required = true;
+                                            date.required = true;
                                         } else {
                                             dueInput.style.display = "none";
+                                            time.required = false;
+                                            date.required = false;
                                         }
                                     }
 
@@ -70,7 +108,7 @@
             </div>
         </div>
 
-        <script src="../static/textEditor.js"></script>
+        <script src="{{ url_for('static', filename='textEditor.js')}}"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js" type="text/javascript"></script>
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
     </body>
