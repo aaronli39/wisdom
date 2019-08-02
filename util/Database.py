@@ -371,5 +371,9 @@ class DBTools:
             return(i['students'][0])
     
     def getTeacherInfo(self, schoolID, username):
+        if not(self.checkTeacherExists(schoolID, username)):
+            return {
+                'name' : ['None']
+            }
         for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'teachers' : {'$elemMatch' : {'username' : username}}}).limit(1):
             return(i['teachers'][0])
