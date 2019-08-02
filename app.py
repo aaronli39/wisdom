@@ -246,7 +246,7 @@ def makePost(classID, schoolID):
 
 
 @app.route('/processmakepost/<schoolID>/<classID>', methods=['POST'])
-def processMakePost(classID, schoolID):
+def processMakePost(schoolID, classID):
     if 'username' not in session:
         return redirect('/')
     if session['userType'] != 'admin' and session['userType'] != 'teacher':
@@ -270,29 +270,29 @@ def processMakePost(classID, schoolID):
         duetime = request.form['duetime']
         due = duedate + " " + duetime
     if submittable == None:
-        submittable = 0
+        submittable = False
     else:
-        submittable = 1
-    postID = db.makePost(schoolID, classID, due, postbody, submittable, postTitle)
+        submittable = True
+    dbtools.makePost(schoolID, classID, due, postbody, submittable, postTitle)
     #starttime = str(db.get_start_time(postID))
-    if dueCheck:
-        event = {
-            'summary': postTitle,
-            'description': request.form['postbody'],
-            'start': {
-                'date': str(datetime.date.today()),
-                #'dateTime': '2019-01-10T09:00:00-07:00',
-                'timeZone': 'America/New_York',
-            },
-            'end': {
-                'date': duedate,
-                #'dateTime': '2019-01-19T17:00:00-07:00',
-                'timeZone': 'America/New_York',
-            }
-            #'start.date': str(datetime.date.today()),
-            #'end.date': str(duedate),
-        }
-        #json_event = json.loads(event)
+    # if dueCheck:
+    #     event = {
+    #         'summary': postTitle,
+    #         'description': request.form['postbody'],
+    #         'start': {
+    #             'date': str(datetime.date.today()),
+    #             #'dateTime': '2019-01-10T09:00:00-07:00',
+    #             'timeZone': 'America/New_York',
+    #         },
+    #         'end': {
+    #             'date': duedate,
+    #             #'dateTime': '2019-01-19T17:00:00-07:00',
+    #             'timeZone': 'America/New_York',
+    #         }
+    #         #'start.date': str(datetime.date.today()),
+    #         #'end.date': str(duedate),
+    #     }
+    #     #json_event = json.loads(event)
     return redirect('/school/' + schoolID + '/class/' + classID)
 
 
