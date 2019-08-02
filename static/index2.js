@@ -34,7 +34,7 @@ function suggest2() {
     }
     var z;
     var clist = document.getElementsByClassName("b2");
-    // console.log(clist);
+    console.log(clist);
     for (i = 0; i < clist.length; i++) {
         clist[i].addEventListener('click', function (e) {
             // console.log(document.getElementById("search_button").value);
@@ -55,6 +55,7 @@ function suggest2() {
                         } else {
                             for (z = 0; z < student_names[x]["classes"].length; z++) {
                                 $("#classList").append("<li>" + student_names[x]["classes"][z] + "</li>");
+                                return;
                             }
                         }
                     }

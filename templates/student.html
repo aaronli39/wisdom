@@ -46,10 +46,10 @@
                 <div class="col-md-3">
                     <div class="card w-100">
                         <div class="card-body">
-                            <h5 class="card-title">{{ j[0] }}</h5>
+                            <h5 class="card-title">{{ j }}</h5>
                             <div class="d-flex justify-content-between">
                                 {% set url = "/school/" + schoolID|string + "/class/" + classID|string %}
-                                <a href="#" class="btn btn-success">Open</a>
+                                <a href="{{ url }}" class="btn btn-success">Open</a>
                             </div>
                         </div>
                     </div>
