@@ -34,6 +34,8 @@
 				</button>
 				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 					<div class="navbar-nav ml-auto">
+						{% set url = "/school/" + schoolID|string %}
+						<a class="nav-item nav-link" href="{{ url }}">School Home</a>
 						<a class="nav-item nav-link" href="/logout">Logout</a>
 					</div>
 				</div>
@@ -111,17 +113,6 @@
 					<div class="row mt-4 mr-2 ml-2">
 						<div class="col pl-0 pr-0">
 							<div class="card cardOut">
-								<div class="card-header pt-1 pb-1 pl-2 pr-2">
-									<!-- use flex -->
-									<div class="d-flex flex-wrap-reverse">
-										<div class="p-1 mr-1 order-1">
-										</div>
-										<div class="d-flex flex-column justify-content-between order-2">
-											<div class="fam mt-auto">You</div>
-											<!-- <div class="text-secondary mb-auto">{{ i[2] }}</div> -->
-										</div>
-									</div>
-								</div>
 								<!-- post content -->
 								<div class="card-body">
 									<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i['due'] }}
