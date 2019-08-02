@@ -92,14 +92,14 @@
     <div class="row">
 
         <div class="col">
-            <form action="/addStu">
+            <form action="/addStu" method="POST">
                 <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                 <label for="className">Add student to class</label>
                 <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Enter class name" name="className" required>
+                    <input type="text" class="form-control" placeholder="Enter class ID" name="classID" required>
                     <div class="input-group-append">
                         <div class="input-group-append">
-                            <input type="text" class="form-control" placeholder="Enter student name" name="sName" required>
+                            <input type="text" class="form-control" placeholder="Enter student ID" name="studentID" required>
                         </div>
                     </div>
                     <div class="input-group-append">
