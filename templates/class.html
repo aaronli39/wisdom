@@ -26,7 +26,8 @@
 		<div class="container">
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
 				<a class="navbar-brand special" href="/">
-					<img src="{{ url_for('static', filename='logo3.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+					<img src="{{ url_for('static', filename='logo3.png') }}" width="30" height="30"
+						class="d-inline-block align-top" alt="">
 					Wisdom</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
 					aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
@@ -115,130 +116,14 @@
 							<div class="card cardOut">
 								<!-- post content -->
 								<div class="card-body">
-									<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i['due'] }}
+									<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due
+										{{ i['due'] }}
 									</p>
 									<h5 class="card-title">{{i['title']}}</h5>
 									<p class="card-text">{{ i['content'] | safe }}</p>
 								</div>
 								<div class="card-footer text-muted p-1">
 									<div class="d-flex flex-wrap justify-content-between align-content-top">
-										<!-- 1st flex item -->
-										{% if i['submittable'] and not isTeacher %}
-										<!-- if student -->
-										<div class="p-1">
-											<form action="/submitFile" method="POST" enctype="multipart/form-data"
-												class="form-group m-0">
-												<input type="hidden" name="postID" value="{{i[0]}}">
-												<input type="file" name="file">
-
-												<!-- </div> -->
-												{% elif i['submittable'] %}
-												<!-- if teacher -->
-												<div class="p-1">
-													<div class="dropdown">
-														<button onclick="show({{ i[0] }})"
-															class="btn btn-primary dropdown-toggle" type="submit"
-															id="dropdownMenuButton" data-toggle="dropdown"
-															aria-haspopup="true" aria-expanded="false" value="Upload">
-															View Submissions
-														</button>
-														<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-															{% set uploads = getPostFiles(i[0]) %}
-															{% if uploads|length == 0 %}
-															<a class="dropdown-item disabled">No submissions yet</a>
-															{% else %}
-															{% for i in uploads %}
-															<a class="dropdown-item" href="/viewFile/{{ i[0] }}"
-																target="_blank">:
-																{{ i[2] }}</a>
-
-															{% endfor %}
-															{% endif %}
-														</div>
-													</div>
-												</div>
-												{% endif %}
-
-												<!-- 2nd flex item -->
-												{% if isTeacher %}
-												{% set url = "/deletepost/" + i[0]|string %}
-												<div class="p-1">
-													<a href="{{ url }}">
-														<button class="btn btn-danger">Delete Post</button>
-													</a>
-												</div>
-												{% else %}
-
-											</form>
-										</div>
-										{% endif %}
-									</div>
-								</div>
-							</div>
-						</div>
-
-					</div>
-					{% endfor %}
-					<br>
-					{% else %}
-					<!-- if student -->
-
-					<!-- if no posts -->
-					{% if posts|length == 0 %}
-					<div class="row mt-4">
-						<div class="col mt-3 mr-4 ml-4">
-							<p style="color: red;">Your teacher hasn't posted anything yet.</p>
-						</div>
-					</div>
-					{% endif %}
-
-					<!-- else show posts -->
-					{% for i in posts %}
-					<div class="row mt-4 mr-2 ml-2">
-						<div class="col pl-0 pr-0">
-							<div class="card cardOut">
-								<div class="card-header pt-1 pb-1 pl-2 pr-2">
-									<!-- use flex -->
-									<div class="d-flex flex-wrap-reverse">
-										<div class="p-1 mr-1 order-1">
-										</div>
-										<div class="d-flex flex-column justify-content-between order-2">
-											<div class="fam mt-auto">You</div>
-											<!-- <div class="text-secondary mb-auto">{{ i[2] }}</div> -->
-										</div>
-
-									</div>
-								</div>
-								<!-- post content -->
-								<div class="card-body">
-									<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i['due'] }}
-									</p>
-									<h5 class="card-title">{{i['title']}}</h5>
-									<p class="card-text">{{ i['content'] | safe }}</p>
-								</div>
-								<div class="card-footer text-muted p-1">
-									<div class="d-flex justify-content-between flex-wrap">
-
-										<!-- 1st flex item -->
-										{% if i['submittable'] and not isTeacher %}
-										<!-- if student -->
-										<div class="p-1 mt-auto mb-auto">
-											<form action="/submitFile" method="POST" enctype="multipart/form-data"
-												class="form-group m-0">
-												<input type="hidden" name="postID" value="{{i[0]}}">
-												<input type="file" name="file">
-										</div>
-										<div class="p-1">
-											<button class="btn btn-success" type="submit" value="Upload">Upload</button>
-										</div>
-										{% elif i['submittable'] %}
-										<!-- if teacher -->
-										<div class="p-1">
-											<button onclick="show({{ i[0] }})" class="btn btn-primary" type="submit"
-												value="Upload">View Submissions</button>
-										</div>
-										{% endif %}
-
 										<!-- 2nd flex item -->
 										{% if isTeacher %}
 										{% set url = "/deletepost/" + i[0]|string %}
@@ -247,70 +132,150 @@
 												<button class="btn btn-danger">Delete Post</button>
 											</a>
 										</div>
-										{% endif %}
+										{% else %}
+
 										</form>
 									</div>
+									{% endif %}
 								</div>
-
 							</div>
 						</div>
-
 					</div>
-					{% endfor %}
-					{% endif %}
+
 				</div>
-				<!-- end of post panel -->
+				{% endfor %}
+				<br>
+				{% else %}
+				<!-- if student -->
 
-				<!-- roster panel -->
-				<div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
-					<div class="row mr-1 ml-1">
-						<div class="col-md-1"></div>
-						<div class="col">
-							<h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructor:
-								{{ (getTeacherInfo(schoolID, classData["teacher"])['name']) | join(' ') }}
-							</h2>
+				<!-- if no posts -->
+				{% if posts|length == 0 %}
+				<div class="row mt-4">
+					<div class="col mt-3 mr-4 ml-4">
+						<p style="color: red;">Your teacher hasn't posted anything yet.</p>
+					</div>
+				</div>
+				{% endif %}
+
+				<!-- else show posts -->
+				{% for i in posts %}
+				<div class="row mt-4 mr-2 ml-2">
+					<div class="col pl-0 pr-0">
+						<div class="card cardOut">
+							<div class="card-header pt-1 pb-1 pl-2 pr-2">
+								<!-- use flex -->
+								<div class="d-flex flex-wrap-reverse">
+									<div class="p-1 mr-1 order-1">
+									</div>
+									<div class="d-flex flex-column justify-content-between order-2">
+										<div class="fam mt-auto">You</div>
+										<!-- <div class="text-secondary mb-auto">{{ i[2] }}</div> -->
+									</div>
+
+								</div>
+							</div>
+							<!-- post content -->
+							<div class="card-body">
+								<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due {{ i['due'] }}
+								</p>
+								<h5 class="card-title">{{i['title']}}</h5>
+								<p class="card-text">{{ i['content'] | safe }}</p>
+							</div>
+							<div class="card-footer text-muted p-1">
+								<div class="d-flex justify-content-between flex-wrap">
+
+									<!-- 1st flex item -->
+									{% if i['submittable'] and not isTeacher %}
+									<!-- if student -->
+									<div class="p-1 mt-auto mb-auto">
+										<form action="/submitFile" method="POST" enctype="multipart/form-data"
+											class="form-group m-0">
+											<input type="hidden" name="postID" value="{{i[0]}}">
+											<input type="file" name="file">
+									</div>
+									<div class="p-1">
+										<button class="btn btn-success" type="submit" value="Upload">Upload</button>
+									</div>
+									{% elif i['submittable'] %}
+									<!-- if teacher -->
+									<div class="p-1">
+										<button onclick="show({{ i[0] }})" class="btn btn-primary" type="submit"
+											value="Upload">View Submissions</button>
+									</div>
+									{% endif %}
+
+									<!-- 2nd flex item -->
+									{% if isTeacher %}
+									{% set url = "/deletepost/" + i[0]|string %}
+									<div class="p-1">
+										<a href="{{ url }}">
+											<button class="btn btn-danger">Delete Post</button>
+										</a>
+									</div>
+									{% endif %}
+									</form>
+								</div>
+							</div>
+
 						</div>
-						<div class="col-md-1"></div>
 					</div>
 
-					<hr>
+				</div>
+				{% endfor %}
+				{% endif %}
+			</div>
+			<!-- end of post panel -->
 
-					<!-- students -->
-					<div class="row mr-1 ml-1">
-						<div class="col-md-1"></div>
-						<div class="col">
+			<!-- roster panel -->
+			<div class="tab-pane fade" id="roster" role="tabpanel" aria-labelledby="roster-tab">
+				<div class="row mr-1 ml-1">
+					<div class="col-md-1"></div>
+					<div class="col">
+						<h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructor:
+							{{ (getTeacherInfo(schoolID, classData["teacher"])['name']) | join(' ') }}
+						</h2>
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+
+				<hr>
+
+				<!-- students -->
+				<div class="row mr-1 ml-1">
+					<div class="col-md-1"></div>
+					<div class="col">
+						{% if isTeacher %}
+						<h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Students</h2>
+						{% else %}
+						<h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
+						{% endif %}
+					</div>
+					<div class="col-md-1"></div>
+				</div>
+				{% for i in classData["students"] %}
+				{% set currStudentInfo = getStudentInfo(schoolID, i) %}
+				<div class="row mr-1 ml-1">
+					<div class="col-md-1"></div>
+					<div class="col ml-4 mr-4 btmBorder2">
+						<div class="row">
+							<div class="col special-margins">
+								<p class="mt-3">{{ currStudentInfo['name'] | join(' ') }}</p>
+							</div>
 							{% if isTeacher %}
-							<h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Students</h2>
+							{% set url = "/usergrades/" + classID|string + "/" + currStudentInfo['studentID'] %}
+							<a class="mt-auto mb-auto" href={{url}}>Grades</a>
 							{% else %}
-							<h2 class="mt-special mb-3 pb-1 text-mine btmBorder mr-1 ml-1"> &nbsp; Classmates</h2>
+							<a href="{{ url }}">Grades</a>
 							{% endif %}
 						</div>
-						<div class="col-md-1"></div>
 					</div>
-					{% for i in classData["students"] %}
-					{% set currStudentInfo = getStudentInfo(schoolID, i) %}
-					<div class="row mr-1 ml-1">
-						<div class="col-md-1"></div>
-						<div class="col ml-4 mr-4 btmBorder2">
-							<div class="row">
-								<div class="col special-margins">
-									<p class="mt-3">{{ currStudentInfo['name'] | join(' ') }}</p>
-								</div>
-								{% if isTeacher %}
-								{% set url = "/usergrades/" + classID|string + "/" + currStudentInfo['studentID'] %}
-								<a class="mt-auto mb-auto" href={{url}}>Grades</a>
-								{% else %}
-								<a href="{{ url }}">Grades</a>
-								{% endif %}
-							</div>
-						</div>
-						<div class="col-md-1"></div>
-					</div>
-					{% endfor %}
+					<div class="col-md-1"></div>
 				</div>
-				<!-- end student tab -->
-
+				{% endfor %}
 			</div>
+			<!-- end student tab -->
+
+		</div>
 		</div>
 		<!-- Optional JavaScript -->
 		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
