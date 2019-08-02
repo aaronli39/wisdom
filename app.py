@@ -169,7 +169,7 @@ def logout():
 def classRoute(schoolID, classID):
     if 'username' not in session:
         return redirect('/login')
-    return render_template('class.html', schoolID = schoolID, classID = classID)
+    return render_template('class.html', schoolID = schoolID, classData = dbtools.getClassInfo(session["username"], schoolID, classID))
 
 @app.route('/addAdmin', methods=['POST'])
 def addAdmin():

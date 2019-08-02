@@ -12,27 +12,33 @@
 		<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
 			integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 		<!-- custom css -->
-		<link rel="stylesheet" href="{{ url_for('static', filename='main.css')}}" type="text/css">
-		<title>{% block title%} {% endblock %}</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}" type="text/css">
+		<link href="https://fonts.googleapis.com/css?family=Lobster+Two:700&display=swap" rel="stylesheet">
+		<style>
+			.special {
+				font-family: 'Lobster Two', cursive;
+			}
+		</style>
+		<title>{% block title%} {{ classData["className"] }} {% endblock %}</title>
 	</head>
 
 	<body id="body">
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
-			<a class="navbar-brand special" href="/">
-				<img src="../static/logo3.png" width="30" height="30" class="d-inline-block align-top" alt="">
-				Wisdom</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-				aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-				<div class="navbar-nav ml-auto">
-					<a class="nav-item nav-link" href="/logout">Logout</a>
-				</div>
-			</div>
-		</nav>
-
 		<div class="container">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+				<a class="navbar-brand special" href="/">
+					<img src="{{ url_for('static', filename='logo3.png') }}" width="30" height="30" class="d-inline-block align-top" alt="">
+					Wisdom</a>
+				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+					aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+					<div class="navbar-nav ml-auto">
+						<a class="nav-item nav-link" href="/logout">Logout</a>
+					</div>
+				</div>
+			</nav>
+
 			<div class="row mt-4">
 				<div class="col">
 					{% set msgs = get_flashed_messages() %}
@@ -44,7 +50,7 @@
 			<!-- heading image -->
 			<div class="d-flex flex-wrap class-head mt-4 justify-content-between mt-5">
 				<div class="p-1 mr-auto">
-					<h2 id="navHeader3" class="ml-3 mt-2"><b>{{ className }}</b></h2>
+					<h2 id="navHeader3" class="ml-3 mt-2"><b>{{ classData["className"] }}</b></h2>
 				</div>
 				<div class="d-flex flex-column mt-2 justify-content-between">
 					<div class="ml-auto mr-3 p-1">
@@ -54,7 +60,8 @@
 						{% endif %}
 					</div>
 					<div class="p-1">
-						<h3 id="navHeader5" class="mb-2 mr-3">Class Name: </h3>
+						<h3 id="navHeader5" class="mb-2 mr-3" style="text-align: center;">Instructor:
+							{{ classData["teacher"] }}</h3>
 					</div>
 				</div>
 			</div>
@@ -90,10 +97,10 @@
 						aria-controls="create" aria-selected="false">Create Assignment</a>
 				</li>
 				{% endif %}
-				<li class="nav-item">
+				<!-- <li class="nav-item">
 					<a class="nav-link" id="cal-tab" data-toggle="tab" href="#cal" role="tab" aria-controls="cal"
 						aria-selected="false">View Calendar</a>
-				</li>
+				</li> -->
 			</ul>
 
 			<!-- tab content -->
@@ -279,25 +286,13 @@
 					<div class="row mr-1 ml-1">
 						<div class="col-md-1"></div>
 						<div class="col">
-							<h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructors</h2>
+							<h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructor:
+								{{ classData["teacher"] }}</h2>
 						</div>
 						<div class="col-md-1"></div>
 					</div>
-					<div class="row mr-1 ml-1">
-						<div class="col-md-1"></div>
-						<div class="col ml-4 mr-4">
-							<div class="row">
-								<div class="col-sm-1 fit">
-									<img src="https://api.adorable.io/avatars/31/{{ session['email'] }}"
-										class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
-								</div>
-								<div class="col special-margins">
-									<p class="mt-3">{{ teacherName }}</p>
-								</div>
-							</div>
-						</div>
-						<div class="col-md-1"></div>
-					</div>
+
+					<hr>
 
 					<!-- students -->
 					<div class="row mr-1 ml-1">
@@ -311,7 +306,7 @@
 						</div>
 						<div class="col-md-1"></div>
 					</div>
-					{% for i in classRoster %}
+					{% for i in classData["students"] %}
 					<div class="row mr-1 ml-1">
 						<div class="col-md-1"></div>
 						<div class="col ml-4 mr-4 btmBorder2">
@@ -321,7 +316,7 @@
 										class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
 								</div>
 								<div class="col special-margins">
-									<p class="mt-3">{{ getName(i) }}</p>
+									<p class="mt-3">{{ i }}</p>
 								</div>
 								{% if isTeacher %}
 								{% set url = "/usergrades/" + classID|string + "/" + i|string %}
@@ -338,26 +333,6 @@
 				<!-- end student tab -->
 
 				{% if isTeacher %}
-				<!-- copy tab -->
-				<div class="tab-pane fade" id="clip" role="tabpanel" aria-labelledby="copy-tab">
-					<div class="row mr-3 ml-3 mt-2">
-						<div class="col mt-2 text-center">
-							<button id="clipBtn" class="btn btn-secondary" data-clipboard-text="{{ inviteCode }}">
-								Copy code ({{ inviteCode }})
-							</button>
-						</div>
-					</div>
-					<div class="row mt-3">
-						<div class="col-md-4"></div>
-						<div class="col-md-4">
-							<div id="alertTip" class="alert alert-success" style="display: none;">Copied to clipboard
-							</div>
-						</div>
-						<div class="col-md-4"></div>
-					</div>
-				</div>
-				<!-- end of copy tab -->
-
 				<!-- edit class info tab -->
 				<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
 					<div class="row mr-3 ml-3 mt-2">
@@ -426,7 +401,7 @@
 				<!-- end of assignment tab -->
 
 				<!-- calendar tab -->
-				<div class="tab-pane fade" id="cal" role="tabpanel" aria-labelledby="cal-tab">
+				<!-- <div class="tab-pane fade" id="cal" role="tabpanel" aria-labelledby="cal-tab">
 					<div class="container">
 						<div class="row mt-2">
 							<div class="col-md-1"></div>
@@ -435,29 +410,22 @@
 							</div>
 						</div>
 
-					</div>
-					<!-- end calendar -->
+					</div> -->
+				<!-- end calendar -->
 
-				</div>
 			</div>
-			<!-- Optional JavaScript -->
-			<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-			<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-				integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-				crossorigin="anonymous"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
-				integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
-				crossorigin="anonymous"></script>
-			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
-				integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-				crossorigin="anonymous"></script>
-			<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.0/clipboard.min.js"></script>
-			<script src="../static/clipboard.js-master/dist/clipboard.min.js"></script>
-			<script src="../static/class.js"></script>
-			<script src="../static/index.js"></script>
-			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"
-				type="text/javascript"></script>
-			<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.bundle.min.js"></script>
+		</div>
+		<!-- Optional JavaScript -->
+		<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+		<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+			integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+			integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+			crossorigin="anonymous"></script>
+		<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+			integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+			crossorigin="anonymous"></script>
 	</body>
 
 </html>

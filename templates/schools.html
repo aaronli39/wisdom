@@ -44,9 +44,9 @@
             </div>
             {% endif %}
             {% endwith %}
-            <h4>Generate Student info from CSV</h4>
+            <h3 class="underline">Generate Student info from CSV</h3>
             <!-- <button class="btn btn-primary">Here</button> -->
-            <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group m-0">
+            <form action="/uploadStudentCSV" method="POST" enctype="multipart/form-data" class="form-group mb-3">
                 <div class="input-group">
                     <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
                     <div class="custom-file">
@@ -61,26 +61,17 @@
         </div>
 
     </div>
+    <hr>
     <div class="row mt-5">
 
         <div class="col">
-            <form action="/addAdmin" method="POST">
-                <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
-                <label for="adminUsername">Add an admin</label>
-                <div class="input-group mb-3">
-                    <input type="text" class="form-control" placeholder="Enter admin username" name="adminUsername" required>
-                    <div class="input-group-append">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-dark" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
+            <h3 class="underline">Create a class below</h3>
         </div>
 
     </div>
-    <div class="row mt-5">
-    
+    <hr>
+    <div class="row">
+
         <div class="col">
             <form action="/addClass" method="POST">
                 <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
@@ -95,39 +86,15 @@
                 </div>
             </form>
         </div>
-    
+
     </div>
-    <form action="/changePass" method="POST">
-        <div class="row mt-5">
-            <div class="col">
-                <label for="oldPassword">Old Password</label>
-                <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Enter old password" name="oldPassword" required>
-                </div>
-            </div>
-            <div class="col">
-                <label for="newPassword">New Password</label>
-                <div class="input-group mb-3">
-                    <input type="password" class="form-control" placeholder="Enter new password" name="newPassword" required>
-                    <div class="input-group-append">
-                        <div class="input-group-append">
-                            <button class="btn btn-outline-dark" type="submit">Submit</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-        </div>
-    </form>
-    <hr>
-    <div class="row mt-3">
+    <div class="row mt-5">
 
         <div class="col text-center">
-            <h3 style="text-align: left;">Search for a class</h3>
+            <h3 style="text-align: left;" class="underline">Search for a class</h3>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="enter class name"
-                    aria-label="college_name" aria-describedby="button-addon2" name="search" id="search_button"
-                    onkeyup="suggest()">
+                <input type="text" class="form-control" placeholder="enter class name" aria-label="college_name"
+                    aria-describedby="button-addon2" name="search" id="search_button" onkeyup="suggest()">
                 <div class="input-group-append">
                     <button class="btn btn-outline-dark" type="submit" id="submit">Search</button>
                 </div>
@@ -139,14 +106,14 @@
         </div>
 
     </div>
-    <div class="row mt-3">
+    <hr>
+    <div class="row mt-5">
 
         <div class="col text-center">
-            <h3 style="text-align: left;">View student schedule</h3>
+            <h3 style="text-align: left;" class="underline">View student schedule</h3>
             <div class="input-group">
-                <input type="text" class="form-control" placeholder="enter student name"
-                    aria-label="college_name" aria-describedby="button-addon2" name="search2" id="search_button2"
-                    onkeyup="suggest2()">
+                <input type="text" class="form-control" placeholder="enter student name" aria-label="college_name"
+                    aria-describedby="button-addon2" name="search2" id="search_button2" onkeyup="suggest2()">
                 <div class="input-group-append">
                     <button class="btn btn-outline-dark" type="submit" id="submit2">Search</button>
                 </div>
@@ -156,13 +123,65 @@
                 </ul>
 
                 <ul id="classList" class="pl-0 mb-5">
-                    
+
                 </ul>
             </div>
         </div>
 
     </div>
+    <div class="row mt-4">
+        
+        <div class="col">
+            <h3 class="underline">Change password or add an admin below</h3>
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+
+        <div class="col">
+            <form action="/addAdmin" method="POST">
+                <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
+                <label for="adminUsername">Add an admin</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Enter admin username" name="adminUsername"
+                        required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-dark" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <form action="/changePass" method="POST">
+        <div class="row">
+            <div class="col">
+                <label for="oldPassword">Old Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter old password" name="oldPassword"
+                        required>
+                </div>
+            </div>
+            <div class="col">
+                <label for="newPassword">New Password</label>
+                <div class="input-group mb-3">
+                    <input type="password" class="form-control" placeholder="Enter new password" name="newPassword"
+                        required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-dark" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
 </div>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script>
     $('.custom-file-input').on('change', function () {
