@@ -15,7 +15,7 @@ app = Flask(__name__)
 
 app.config["MONGO_DBNAME"] = config['databaseName']
 app.config["MONGO_URI"] = config['mongoURI']
-app.config["SECRET_KEY"] = urandom(32)
+app.config["SECRET_KEY"] = b'J\x94":\x07eI\x8d\xe1(/\x16O\x08\xc8\xb4C1xDowKq\x03E\xc5^\xd3\xfe\xba\x03'
 
 dbtools = Database.DBTools(app)
 
