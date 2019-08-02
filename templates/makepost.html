@@ -78,6 +78,7 @@
                                     <input id="dateo" type="date" name="duedate" value={{date}} min={{date}} max="2019-12-31">
                                     <input id="timeo" type="time" name="duetime"><br>
                                 </div>
+
                                 <script>
                                     var check = document.getElementById("duecheck");
                                     var dueInput = document.getElementById("due");
@@ -99,6 +100,7 @@
 
                                     check.addEventListener('change', toggleDue);
                                 </script><br>
+                                <input type="submit" id="submitButton" class="btn btn-primary mt-3">
                             </div>
                         </div>
                     </form>
