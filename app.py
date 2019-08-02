@@ -52,14 +52,12 @@ def log():
         else:
             flash('Invalid username or password.')
     else:
-        if dbtools.authStudent(inputUsername, inputPass,
-                               request.form['schoolid']):
+        if dbtools.authStudent(request.form['schoolid'], inputUsername, inputPass):
             session['username'] = inputUsername
             session['userType'] = 'student'
             session['schoolID'] = request.form['schoolid']
             return redirect('/student')
-        elif dbtools.authTeacher(inputUsername, inputPass,
-                                 request.form['schoolid']):
+        elif dbtools.authTeacher(request.form['schoolid'], inputUsername, inputPass):
             session['username'] = inputUsername
             session['userType'] = 'teacher'
             session['schoolID'] = request.form['schoolid']
