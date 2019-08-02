@@ -61,7 +61,7 @@
 					</div>
 					<div class="p-1">
 						<h3 id="navHeader5" class="mb-2 mr-3" style="text-align: center;">Instructor:
-							{{ classData["teacher"] }}</h3>
+							{{ (getTeacherInfo(schoolID, classData["teacher"])['name']) | join(' ') }}</h3>
 					</div>
 				</div>
 			</div>
@@ -88,14 +88,6 @@
 					<a class="nav-link" id="contact-tab" data-toggle="tab" href="#clip" role="tab" aria-controls="clip"
 						aria-selected="false">Invite Code</a>
 				</li> -->
-				<li class="nav-item">
-					<a class="nav-link" id="edit-tab" data-toggle="tab" href="#edit" role="tab" aria-controls="edit"
-						aria-selected="false">Class Info</a>
-				</li>
-				<li class="nav-item">
-					<a class="nav-link" id="create-tab" data-toggle="tab" href="#creation" role="tab"
-						aria-controls="create" aria-selected="false">Create Assignment</a>
-				</li>
 				{% endif %}
 				<!-- <li class="nav-item">
 					<a class="nav-link" id="cal-tab" data-toggle="tab" href="#cal" role="tab" aria-controls="cal"
@@ -167,7 +159,7 @@
 															{% else %}
 															{% for i in uploads %}
 															<a class="dropdown-item" href="/viewFile/{{ i[0] }}"
-																target="_blank"><b>{{ getName(i[1]) }}</b>:
+																target="_blank">:
 																{{ i[2] }}</a>
 
 															{% endfor %}
@@ -287,7 +279,8 @@
 						<div class="col-md-1"></div>
 						<div class="col">
 							<h2 class="mt-4 mb-2 pb-1 text-mine btmBorder ml-1 mr-1"> &nbsp; Instructor:
-								{{ classData["teacher"] }}</h2>
+								{{ (getTeacherInfo(schoolID, classData["teacher"])['name']) | join(' ') }}
+							</h2>
 						</div>
 						<div class="col-md-1"></div>
 					</div>
@@ -307,19 +300,16 @@
 						<div class="col-md-1"></div>
 					</div>
 					{% for i in classData["students"] %}
+					{% set currStudentInfo = getStudentInfo(schoolID, i) %}
 					<div class="row mr-1 ml-1">
 						<div class="col-md-1"></div>
 						<div class="col ml-4 mr-4 btmBorder2">
 							<div class="row">
-								<div class="col-sm-1 fit">
-									<img src="https://api.adorable.io/avatars/31/{{ getName(i) }}"
-										class="round-Img ml-1 pl-2 pr-2 pt-2 pb-2" alt="Icon">
-								</div>
 								<div class="col special-margins">
-									<p class="mt-3">{{ i }}</p>
+									<p class="mt-3">{{ currStudentInfo['name'] | join(' ') }}</p>
 								</div>
 								{% if isTeacher %}
-								{% set url = "/usergrades/" + classID|string + "/" + i|string %}
+								{% set url = "/usergrades/" + classID|string + "/" + currStudentInfo['studentID'] %}
 								<a class="mt-auto mb-auto" href={{url}}>Grades</a>
 								{% else %}
 								<a href="{{ url }}">Grades</a>
@@ -331,87 +321,6 @@
 					{% endfor %}
 				</div>
 				<!-- end student tab -->
-
-				{% if isTeacher %}
-				<!-- edit class info tab -->
-				<div class="tab-pane fade" id="edit" role="tabpanel" aria-labelledby="edit-tab">
-					<div class="row mr-3 ml-3 mt-2">
-						<div class="col mt-2 text-center">
-							{% set url = "/editclass/" + classID|string %}
-							<form action={{url}} method="POST">
-								<input type="text" name="classname" placeholder="Class Name" value={{className}}
-									required>
-								<div class="container mt-2">
-									<div class="card cardOut mt-5">
-										<div class="card-header pt-1 pb-1 pl-2">
-											<div class="row">
-												<div class="col">
-													<b>Class Description</b>
-												</div>
-											</div>
-										</div>
-										<div class="card-body" id="textEditor" contenteditable="true">{{desc|safe}}
-										</div>
-									</div>
-								</div>
-								<input type="hidden" id="hiddenInput" name="desc" value="">
-
-								<br>
-								<input id="submitButton" type="submit" class="btn btn-primary mt-3"
-									value="Update Class">
-							</form>
-							<br>
-							<br>
-							<button class="btn btn-danger" id="deleteClass" onclick="switchButtons()">Delete
-								Class</button>
-							{% set url = "/deleteclass/" + classID|string %}
-							<a href={{url}} id="confirmDelete">
-								<button class="btn btn-danger" id="confirmDelete">Confirm</button>
-							</a>
-							<script>
-								var deleteClass = document.getElementById("deleteClass");
-								var confirmDelete = document.getElementById("confirmDelete");
-								confirmDelete.style.display = "none";
-
-								var switchButtons = function () {
-									deleteClass.style.display = "none";
-									confirmDelete.style.display = "block";
-								}
-							</script>
-						</div>
-					</div>
-				</div>
-				{% endif %}
-				<!-- end edit class info tab -->
-
-				<!-- create assignment tab -->
-				<div class="tab-pane fade" id="creation" role="tabpanel" aria-labelledby="edit-tab">
-					<div class="row mt-5">
-						<div class="col mt-1 text-center">
-							{% set url = "/gradebook/" + classID|string %}
-							<form action={{url}} method="POST">
-								<input name="assignment" type="text" class="mt-2" placeholder="Enter Assignment Name">
-								<button id="btnClick" class="btn btn-primary">
-									Create
-								</button>
-							</form>
-						</div>
-					</div>
-				</div>
-				<!-- end of assignment tab -->
-
-				<!-- calendar tab -->
-				<!-- <div class="tab-pane fade" id="cal" role="tabpanel" aria-labelledby="cal-tab">
-					<div class="container">
-						<div class="row mt-2">
-							<div class="col-md-1"></div>
-							<div class="col" style="text-align:center">
-								<div class="col-md-1"></div>
-							</div>
-						</div>
-
-					</div> -->
-				<!-- end calendar -->
 
 			</div>
 		</div>

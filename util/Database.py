@@ -365,3 +365,11 @@ class DBTools:
             }
         })
         return "Class instructor changed."
+
+    def getStudentInfo(self, schoolID, studentID):
+        for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'students' : {'$elemMatch' : {'studentID' : studentID}}}).limit(1):
+            return(i['students'][0])
+    
+    def getTeacherInfo(self, schoolID, username):
+        for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'teachers' : {'$elemMatch' : {'username' : username}}}).limit(1):
+            return(i['teachers'][0])

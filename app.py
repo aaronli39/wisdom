@@ -213,11 +213,10 @@ def logout():
 def classRoute(schoolID, classID):
     if 'username' not in session:
         return redirect('/login')
-    return render_template('class.html',
-                           schoolID=schoolID,
-                           classData=dbtools.getClassInfo(
-                               session["username"], schoolID, classID))
-
+    classData = dbtools.getClassInfo(session["username"], schoolID, classID)
+    return render_template('class.html', schoolID = schoolID, classData = classData,
+                            isTeacher = session['userType'] == 'admin' or session['userType'] == 'teacher',
+                            getTeacherInfo = dbtools.getTeacherInfo, getStudentInfo = dbtools.getStudentInfo)
 
 @app.route('/addAdmin', methods=['POST'])
 def addAdmin():
