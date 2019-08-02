@@ -217,7 +217,21 @@ def logout():
 def classRoute(schoolID, classID):
     if 'username' not in session:
         return redirect('/login')
+    if session['userType'] == 'admin' and not dbtools.checkAdmin(schoolID, session['username']):
+        flash("You are not a administrator of this school!")
+        return redirect('/admin')
     classData = dbtools.getClassInfo(session["username"], schoolID, classID)
+    if classData == None:
+        flash("This class does not exist!")
+        return redirectByUserType(session['userType'])
+    if session['userType'] == 'teacher' and not classData['teacher'] != session['username']:
+        flash("You are not a teacher of this class!")
+        return redirect('/teacher')
+    if session['userType'] == 'student':
+        studentInfo = dbtools.getStudentInfoByUsername(schoolID, session['username'])
+        if classData['classID'] not in studentInfo['classes']:
+            flash("You are not enrolled in this class!")
+            return redirect('/student')
     return render_template('class.html', schoolID = schoolID, classData = classData,
                             isTeacher = session['userType'] == 'admin' or session['userType'] == 'teacher',
                             getTeacherInfo = dbtools.getTeacherInfo, getStudentInfo = dbtools.getStudentInfo, classID = classID)
