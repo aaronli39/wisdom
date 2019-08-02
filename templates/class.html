@@ -184,26 +184,6 @@
 							<div class="card-footer text-muted p-1">
 								<div class="d-flex justify-content-between flex-wrap">
 
-									<!-- 1st flex item -->
-									{% if i['submittable'] and not isTeacher %}
-									<!-- if student -->
-									<div class="p-1 mt-auto mb-auto">
-										<form action="/submitFile" method="POST" enctype="multipart/form-data"
-											class="form-group m-0">
-											<input type="hidden" name="postID" value="{{i[0]}}">
-											<input type="file" name="file">
-									</div>
-									<div class="p-1">
-										<button class="btn btn-success" type="submit" value="Upload">Upload</button>
-									</div>
-									{% elif i['submittable'] %}
-									<!-- if teacher -->
-									<div class="p-1">
-										<button onclick="show({{ i[0] }})" class="btn btn-primary" type="submit"
-											value="Upload">View Submissions</button>
-									</div>
-									{% endif %}
-
 									<!-- 2nd flex item -->
 									{% if isTeacher %}
 									<div class="p-1">
