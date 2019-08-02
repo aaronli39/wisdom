@@ -48,10 +48,8 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ j[0] }}</h5>
                             <div class="d-flex justify-content-between">
-                                <a href="/school/{{ j[1] }}" class="btn btn-success">Open</a>
-                                <button id="b1" class="btn btn-warning" type="button">Delete</button>
-                                <a id="b2" href="/deleteSchool/{{ j[1] }}" class="btn btn-danger"
-                                    style="display: none;">Confirm</a>
+                                {% set url = "/school/" + schoolID|string + "/class/" + classID|string %}
+                                <a href="#" class="btn btn-success">Open</a>
                             </div>
                         </div>
                     </div>

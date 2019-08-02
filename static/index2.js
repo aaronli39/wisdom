@@ -23,8 +23,6 @@ function suggest2() {
         if (temp.indexOf(input) > -1) {
             $("#suggestions2").append("<li class='b2'>" + student_names[i]["name"][1] + ", " + student_names[i]["name"][0] + ' (' + student_names[i]['studentID'] + ")</li>");
             ctr++;
-            // counter++;
-            console.log(counter);
         } else if (ctr == 0){
             $("#suggestions2").append("<li>No results</li>");
             return;
@@ -34,7 +32,7 @@ function suggest2() {
             break;
         }
     }
-    //when user clicks a list item, change the search field to that item
+    var z;
     var clist = document.getElementsByClassName("b2");
     // console.log(clist);
     for (i = 0; i < clist.length; i++) {
@@ -43,18 +41,19 @@ function suggest2() {
             // $("suggestions").value
             $("#suggestions2").empty();
             for (i = 0; i < student_names.length; i++) {
-                temp = this.innerHTML.split(", ");
+                temp = this.innerHTML
+                temp = temp.slice(0, temp.indexOf(" ("));
+                temp = temp.split(", ");
                 var x;
                 for (x = 0; x < student_names.length; x++) {
                     if (temp[0] == student_names[x]["name"][1] && temp[1] == student_names[x]["name"][0]) {
-                        console.log(student_names[x]["name"]);
-                        var lis = document.getElementById("classList");
-                        var z;
+                        console.log(student_names[x]["classes"].length);
                         if (student_names[x]["classes"].length == 0) {
                             $("#classList").append("<li>This student has no classes</li>");
                             return;
+                            // console.log("added");
                         } else {
-                            for (z = 0; z < student_names[x]["classes"]; z++) {
+                            for (z = 0; z < student_names[x]["classes"].length; z++) {
                                 $("#classList").append("<li>" + student_names[x]["classes"][z] + "</li>");
                             }
                         }

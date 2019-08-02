@@ -119,10 +119,13 @@ def admin():
 def student():
     if 'username' not in session:
         return redirect('/login')
-    temp = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])
+    temp = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])["classes"]
     print(temp, "\n\n")
-    dbtools.
-    return render_template("student.html")
+    ret = []
+    for i in temp:
+        classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
+        ret.append(classData["className"])
+    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = temp)
 
 
 @app.route('/changePass', methods=['POST'])
@@ -231,17 +234,19 @@ def addAdmin():
                          request.form['adminUsername']))
     return redirect(request.referrer)
 
-@app.route("/addStu/<schoolID>/<studentID>/classID")
-def addStu(schoolID, classID, studentID):
+@app.route("/addStu", methods=["POST"])
+def addStud():
     if 'username' not in session:
         return redirect('/')
     if session['userType'] != 'admin' and session['userType'] != 'teacher':
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
-    student = request.args.get("sName")
-    classN = request.args.get("className")
-    dbtools.addStudentClass('username', schoolID, studentID, classID)
-    return
+    student = request.form.get("studentID")
+    schoolID = request.form.get("schoolID")
+    classID = request.form.get("classID")
+    dbtools.addStudentClass(session['username'], schoolID, student, classID)
+    flash("Student added to class")
+    return redirect("/school/" + str(schoolID))
 
 
 @app.route('/makepost/<schoolID>/<classID>')
