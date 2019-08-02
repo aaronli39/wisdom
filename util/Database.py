@@ -377,3 +377,16 @@ class DBTools:
             }
         for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'teachers' : {'$elemMatch' : {'username' : username}}}).limit(1):
             return(i['teachers'][0])
+    
+    def makePost(self, schoolID, classID, due, postbody, submittable, postTitle):
+        self.mongo.db.school.update({'schoolID' : schoolID, 'classes.classID' : classID}, {
+            '$push' : {
+                'classes.$.posts' : {
+                    'title' : postTitle,
+                    'content' : postbody,
+                    'submittable' : submittable,
+                    'submissions' : [],
+                    'due' : due
+                }
+            }
+        })
