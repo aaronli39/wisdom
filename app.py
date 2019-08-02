@@ -119,13 +119,12 @@ def admin():
 def student():
     if 'username' not in session:
         return redirect('/login')
-    temp = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])["classes"]
-    print(temp, "\n\n")
+    classIDs = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])["classes"]
     ret = []
-    for i in temp:
+    for i in classIDs:
         classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
         ret.append(classData["className"])
-    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = temp)
+    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = classIDs)
 
 
 @app.route('/changePass', methods=['POST'])
@@ -173,6 +172,8 @@ def createClass():
 def schoolPage(schoolID):
     if 'username' not in session:
         return redirect('/login')
+    if session['userType'] != 'admin':
+        return redirectByUserType(session['userType'])
     if not (dbtools.checkAdmin(schoolID, session['username'])):
         flash('You are not a administrator of this school!')
         return redirectByUserType(session['userType'])
