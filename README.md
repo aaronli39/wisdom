@@ -1,4 +1,4 @@
-# Welcome to Wistom: your student management solution
+# Welcome to Wisdom: your student management solution
 
 ---
 
