@@ -77,7 +77,10 @@ def reg():
     if passConfirm != inputPass:
         flash('Passwords do not match!')
     else:
-        flash(dbtools.registerAdmin(inputUsername, inputPass))
+        msg = dbtools.registerAdmin(inputUsername, inputPass)
+        flash(msg)
+        if msg == 'Registration successful.':
+            return redirect('/login')
     return render_template('register.html')
 
 
