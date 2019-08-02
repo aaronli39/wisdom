@@ -55,7 +55,7 @@
 				<div class="d-flex flex-column mt-2 justify-content-between">
 					<div class="ml-auto mr-3 p-1">
 						{% if isTeacher %}
-						{% set url = "/makepost/" + classID|string %}
+						{% set url = "/makepost/" + schoolID|string + "/" + classID|string %}
 						<a href="{{ url }}"><button class="btn btn-success">New Post</button></a>
 						{% endif %}
 					</div>
