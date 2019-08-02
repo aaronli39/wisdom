@@ -119,7 +119,9 @@ def admin():
 def student():
     if 'username' not in session:
         return redirect('/login')
-    return "Some student page"
+    temp = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])
+    print(temp, "\n\n")
+    return render_template("student.html")
 
 
 @app.route('/changePass', methods=['POST'])
@@ -238,6 +240,7 @@ def addStu(schoolID, classID, studentID):
     student = request.args.get("sName")
     classN = request.args.get("className")
     dbtools.addStudentClass('username', schoolID, studentID, classID)
+    return
 
 
 @app.route('/makepost/<schoolID>/<classID>')
