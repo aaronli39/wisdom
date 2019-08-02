@@ -45,7 +45,7 @@ class DBTools:
         gennedName = (name[0][0] + name[-1]).lower() + random.choice(CHARSET[:10]) #flast
         checkStudentUsername = {
             'schoolID' : schoolID,
-            'students.student' : gennedName
+            'students.username' : gennedName
         }
         while self.mongo.db.school.find(checkStudentUsername).limit(1).count() != 0: #Ensures no identical usernames
             gennedName += random.choice(CHARSET[:10])
@@ -179,6 +179,9 @@ class DBTools:
             }
         }
         return self.mongo.db.school.find(inClassCheck).limit(1).count() != 0
+    
+    def checkTeacherExists(self, schoolID, teacherUsername):
+        return self.mongo.db.school.find({'schoolID' : schoolID, 'teachers.username' : teacherUsername}).limit(1).count() != 0
 
     def getSchoolIDs(self, username):
         return [x['schools'] for x in self.mongo.db.admin.find({'username' : username}).limit(1)][0]
@@ -266,6 +269,13 @@ class DBTools:
             studentLst = i['classes'][0]['students']
         for studentID in studentLst:
             self.removeStudentFromClass(username, schoolID, studentID, classID, skipChecks = True)
+        for i in self.mongo.db.school.find({'schoolID': schoolID, 'classes.classID': classID}, {'classes': {'$elemMatch': {'classID': classID}}}).limit(1):
+            oldTeacher = i['classes'][0]['teacher']
+            self.mongo.db.school.update({'schoolID': schoolID, 'teachers.username': oldTeacher}, {  # Remove class from old teacher's class list
+                '$pull': {
+                    'teachers.$.classes': classID
+                }
+            })
         self.mongo.db.school.update(classSelector, { #Removes class from class list
             '$pull' : {
                 'classes' : {
@@ -289,3 +299,50 @@ class DBTools:
         else: #Modify student password
             self.mongo.db.school.update({'schoolID' : schoolID, 'students.username' : username}, {'$set' : {'students.$.password' : newPassword}})
         return "Password changed."
+    
+    def addTeacher(self, username, schoolID, teacherName, teacherPassword):
+        if not(self.checkAdmin(schoolID, username)):
+            return 'You are not a administrator of this school!'
+        name = teacherName.strip().split(' ')
+        gennedName = (name[0][0] + name[-1]).lower() + random.choice(CHARSET[:10]) #flast
+        checkTeacherUsername = {
+            'schoolID' : schoolID,
+            'teachers.username' : gennedName
+        }
+        while self.mongo.db.school.find(checkTeacherUsername).limit(1).count() != 0: #Ensures no identical usernames
+            gennedName += random.choice(CHARSET[:10])
+        self.mongo.db.school.update({'schoolID' : schoolID}, {
+            '$push' : {
+                'teachers' : {
+                    'username' : gennedName,
+                    'password' : teacherPassword,
+                    'classes' : [],
+                    'name' : name
+                }
+            }
+        })
+        return f"Teacher account {gennedName} created."
+    
+    def changeInstructor(self, username, schoolID, classID, teacherUsername):
+        if not(self.checkAdmin(schoolID, username)):
+            return 'You are not a administrator of this school!'
+        if not(self.checkTeacherExists(schoolID, teacherUsername)):
+            return 'This teacher does not exist!'
+        for i in self.mongo.db.school.find({'schoolID' : schoolID, 'classes.classID' : classID}, {'classes': {'$elemMatch': {'classID': classID}}}).limit(1):
+            oldTeacher = i['classes'][0]['teacher']
+            self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : oldTeacher}, { #Remove class from old teacher's class list
+                '$pull' : {
+                    'teachers.$.classes' : classID
+                }
+            })
+        self.mongo.db.school.update({'schoolID' : schoolID, 'classes.classID' : classID}, { #Sets new teacher
+            '$set' : {
+                'classes.$.teacher' : teacherUsername
+            }
+        })
+        self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : teacherUsername}, { #Adds class to teacher's class list
+            '$push' : {
+                'teachers.$.classes' : classID
+            }
+        })
+        return "Class instructor changed."
