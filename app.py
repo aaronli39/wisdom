@@ -44,12 +44,13 @@ def log():
         return render_template('login.html')
     inputPass = request.form['pass']
     inputUsername = request.form['username']
-    if request.form['schoolid'] == '':  #Admin login
+    if request.form['schoolid'] == '':  # Admin login
         if dbtools.authAdmin(inputUsername, inputPass):
             session['username'] = inputUsername
             session['userType'] = 'admin'
             return redirect('/admin')
         else:
+            session.pop('_flashes', None)
             flash('Invalid username or password.')
     else:
         if dbtools.authStudent(request.form['schoolid'], inputUsername, inputPass):
@@ -63,6 +64,7 @@ def log():
             session['schoolID'] = request.form['schoolid']
             return redirect('/teacher')
         else:
+            session.pop('_flashes', None)
             flash('invalid username or password.')
     return render_template('login.html')
 
@@ -75,9 +77,11 @@ def reg():
     passConfirm = request.form['passConfirm']
     inputUsername = request.form['username']
     if passConfirm != inputPass:
+        session.pop('_flashes', None)
         flash('Passwords do not match!')
     else:
         msg = dbtools.registerAdmin(inputUsername, inputPass)
+        session.pop('_flashes', None)
         flash(msg)
         if msg == 'Registration successful.':
             return redirect('/login')
@@ -89,16 +93,20 @@ def uploadStudentCSV():
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
+        session.pop('_flashes', None)
         flash('You are not a administrator!')
         return redirectByUserType(session['userType'])
     if 'inputCSV' not in request.files:
+        session.pop('_flashes', None)
         flash('No file part')
         return redirect(request.referrer)
     inputFile = request.files['inputCSV']
     if inputFile.filename == '':
+        session.pop('_flashes', None)
         flash('No file uploaded')
         return redirect(request.referrer)
     if inputFile.filename.rsplit('.', 1)[1].lower() != 'csv':
+        session.pop('_flashes', None)
         flash('Invalid file type')
         return redirect(request.referrer)
     csv = inputFile.read().decode('utf-8')
@@ -122,13 +130,15 @@ def admin():
 def student():
     if 'username' not in session:
         return redirect('/login')
-    studentInfo = dbtools.getStudentInfoByUsername(session['schoolID'], session['username'])
+    studentInfo = dbtools.getStudentInfoByUsername(
+        session['schoolID'], session['username'])
     classIDs = studentInfo["classes"]
     ret = []
     for i in classIDs:
-        classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
+        classData = dbtools.getClassInfo(
+            session["username"], session["schoolID"], i)
         ret.append(classData["className"])
-    return render_template("student.html", classes = ret, schoolID = session["schoolID"], classID = classIDs, name = studentInfo['name'][0])
+    return render_template("student.html", classes=ret, schoolID=session["schoolID"], classID=classIDs, name=studentInfo['name'][0])
 
 
 @app.route('/changePass', methods=['POST'])
@@ -146,13 +156,15 @@ def changePass():
                                        request.form['newPassword'],
                                        session['schoolID']))
         else:
+            session.pop('_flashes', None)
             flash("Incorrect password")
     elif session['userType'] == 'admin':
         if dbtools.authAdmin(session['username'], request.form['oldPassword']):
-            flash(
-                dbtools.changePassword(session['username'],
-                                       request.form['newPassword']))
+            session.pop('_flashes', None)
+            flash(dbtools.changePassword(
+                session['username'], request.form['newPassword']))
         else:
+            session.pop('_flashes', None)
             flash("Incorrect password")
     return redirect(request.referrer)
 
@@ -162,12 +174,15 @@ def createClass():
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
+        session.pop('_flashes', None)
         flash('You are not a administrator!')
         return redirectByUserType(session['userType'])
     if request.form['schoolName'] == '':
+        session.pop('_flashes', None)
         flash('No school name given')
         return redirect('/admin')
     dbtools.registerSchool(session['username'], request.form['schoolName'])
+    session.pop('_flashes', None)
     flash('Registration successful')
     return redirect('/admin')
 
@@ -179,6 +194,7 @@ def schoolPage(schoolID):
     if session['userType'] != 'admin':
         return redirectByUserType(session['userType'])
     if not (dbtools.checkAdmin(schoolID, session['username'])):
+        session.pop('_flashes', None)
         flash('You are not a administrator of this school!')
         return redirectByUserType(session['userType'])
     return render_template("schools.html",
@@ -191,11 +207,12 @@ def addClass():
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
+        session.pop('_flashes', None)
         flash('You are not a administrator!')
         return redirectByUserType(session['userType'])
-    flash(
-        dbtools.addClass(session['username'], request.form['schoolID'],
-                         request.form['className']))
+    session.pop('_flashes', None)
+    flash(dbtools.addClass(
+        session['username'], request.form['schoolID'], request.form['className']))
     return redirect(request.referrer)
 
 
@@ -204,8 +221,10 @@ def deleteSchool(schoolID):
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
+        session.pop('_flashes', None)
         flash('You are not a administrator!')
         return redirectByUserType(session['userType'])
+    session.pop('_flashes', None)
     flash(dbtools.deleteSchool(session['username'], schoolID))
     return redirect('/admin')
 
@@ -223,59 +242,72 @@ def classRoute(schoolID, classID):
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] == 'admin' and not dbtools.checkAdmin(schoolID, session['username']):
+        session.pop('_flashes', None)
         flash("You are not a administrator of this school!")
         return redirect('/admin')
     classData = dbtools.getClassInfo(session["username"], schoolID, classID)
     if classData == None:
+        session.pop('_flashes', None)
         flash("This class does not exist!")
         return redirectByUserType(session['userType'])
     if session['userType'] == 'teacher' and classData['teacher'] != session['username']:
+        session.pop('_flashes', None)
         flash("You are not a teacher of this class!")
         return redirect('/teacher')
     if session['userType'] == 'student':
-        studentInfo = dbtools.getStudentInfoByUsername(schoolID, session['username'])
+        studentInfo = dbtools.getStudentInfoByUsername(
+            schoolID, session['username'])
         if classData['classID'] not in studentInfo['classes']:
+            session.pop('_flashes', None)
             flash("You are not enrolled in this class!")
             return redirect('/student')
-    return render_template('class.html', schoolID = schoolID, classData = classData,
-                            isTeacher = session['userType'] == 'admin' or session['userType'] == 'teacher',
-                            getTeacherInfo = dbtools.getTeacherInfo, getStudentInfo = dbtools.getStudentInfo, classID = classID)
+    return render_template('class.html', schoolID=schoolID, classData=classData,
+                           isTeacher=session['userType'] == 'admin' or session['userType'] == 'teacher',
+                           getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID)
+
 
 @app.route('/addAdmin', methods=['POST'])
 def addAdmin():
     if 'username' not in session:
         return redirect('/login')
     if session['userType'] != 'admin':
+        session.pop('_flashes', None)
         flash('You are not a administrator!')
         return redirectByUserType(session['userType'])
-    flash(
-        dbtools.addAdmin(session['username'], request.form['schoolID'],
-                         request.form['adminUsername']))
+    session.pop('_flashes', None)
+    flash(dbtools.addAdmin(
+        session['username'], request.form['schoolID'], request.form['adminUsername']))
     return redirect(request.referrer)
+
 
 @app.route('/teacher')
 def teacher():
     if 'username' not in session:
         return redirect('/login')
-    teacherInfo = dbtools.getTeacherInfo(session['schoolID'], session['username'])
+    teacherInfo = dbtools.getTeacherInfo(
+        session['schoolID'], session['username'])
     classIDs = teacherInfo["classes"]
     ret = []
     for i in classIDs:
-        classData = dbtools.getClassInfo(session["username"], session["schoolID"], i)
+        classData = dbtools.getClassInfo(
+            session["username"], session["schoolID"], i)
         ret.append(classData["className"])
-    return render_template("teacher.html", classes = ret, schoolID = session["schoolID"], classID = classIDs, name = teacherInfo['name'][0])
+    return render_template("teacher.html", classes=ret, schoolID=session["schoolID"], classID=classIDs, name=teacherInfo['name'][0])
+
 
 @app.route("/addStu", methods=["POST"])
 def addStud():
     if 'username' not in session:
         return redirect('/')
     if session['userType'] != 'admin' and session['userType'] != 'teacher':
+        session.pop('_flashes', None)
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
     student = request.form.get("studentID")
     schoolID = request.form.get("schoolID")
     classID = request.form.get("classID")
     dbtools.addStudentClass(session['username'], schoolID, student, classID)
+    session.pop('_flashes', None)
     flash("Student added to class")
     return redirect("/school/" + str(schoolID))
 
@@ -285,6 +317,7 @@ def makePost(classID, schoolID):
     if 'username' not in session:
         return redirect('/')
     if session['userType'] != 'admin' and session['userType'] != 'teacher':
+        session.pop('_flashes', None)
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
     date = str(datetime.date.today())
@@ -299,20 +332,21 @@ def processMakePost(schoolID, classID):
     if 'username' not in session:
         return redirect('/')
     if session['userType'] != 'admin' and session['userType'] != 'teacher':
+        session.pop('_flashes', None)
         flash("User is not a teacher or admin of this class")
         return redirect(request.referrer)
     postTitle = request.form['postTitle']
     postbody = request.form['postbody']
-    postbody = postbody.replace('<br>', ' ')  #Replace new lines with a space
+    postbody = postbody.replace('<br>', ' ')  # Replace new lines with a space
     postbody = postbody.replace(
-        '<div>', ' ')  #Same as above, used for compatability among browsers
+        '<div>', ' ')  # Same as above, used for compatability among browsers
     postbody = postbody.replace('</div>', '')
     duedate = None
     due = "Never"
     dueCheck = False
     if 'setDueDate' in request.form:
         dueCheck = True
-    if dueCheck:  #Will insert a due date if the checkbox is checked
+    if dueCheck:  # Will insert a due date if the checkbox is checked
         duedate = request.form['duedate']
         duetime = request.form['duetime']
         due = duedate + " " + duetime
