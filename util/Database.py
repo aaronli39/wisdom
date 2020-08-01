@@ -326,9 +326,10 @@ class DBTools:
             self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : username}, {'$set' : {'teachers.$.password' : newPassword}})
         return "Password changed."
     
-    def addTeacher(self, username, schoolID, teacherName, teacherPassword):
-        if not(self.checkAdmin(schoolID, username)):
-            return 'You are not a administrator of this school!'
+    def addTeacher(self, username, schoolID, teacherName, teacherPassword, skipAdminCheck = False):
+        if not(skipAdminCheck):
+            if not(self.checkAdmin(schoolID, username)):
+                return "User is not an admin of this school!"
         name = teacherName.strip().split(' ')
         gennedName = (name[0][0] + name[-1]).lower() + random.choice(CHARSET[:10]) #flast
         checkStudentUsername = {
