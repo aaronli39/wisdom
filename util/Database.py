@@ -394,7 +394,7 @@ class DBTools:
             return(i['students'][0])
     
     def getTeacherInfo(self, schoolID, teacherID):
-        if not(self.checkTeacherExists(schoolID, username)):
+        if not(self.checkTeacherExists(schoolID, teacherID)):
             return {
                 'name' : ['None']
             }
