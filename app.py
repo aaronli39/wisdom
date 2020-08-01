@@ -292,24 +292,25 @@ def classRoute(schoolID, classID):
     calendarData = {}
     for i in classData['posts']:
         if i['due'] != "Never":
-            dueInfo = i['due'].split() #[date, time]
+            dueInfo = i['due'].split()  # [date, time]
             year, month, day = (int(x) for x in dueInfo[0].split('-'))
             if year not in calendarData:
                 calendarData[year] = []
-            calendarData[year].append([month, day, dueInfo[1], i['title'], i['content']])
+            calendarData[year].append(
+                [month, day, dueInfo[1], i['title'], i['content']])
     numToMon = {
-        1 : "JAN",
-        2 : "FEB",
-        3 : "MAR",
-        4 : "APR",
-        5 : "MAY",
-        6 : "JUN",
-        7 : "JUL",
-        8 : "AUG",
-        9 : "SEP",
-        10 : "OCT",
-        11 : "NOV",
-        12 : "DEC"
+        1: "JAN",
+        2: "FEB",
+        3: "MAR",
+        4: "APR",
+        5: "MAY",
+        6: "JUN",
+        7: "JUL",
+        8: "AUG",
+        9: "SEP",
+        10: "OCT",
+        11: "NOV",
+        12: "DEC"
     }
     for i in calendarData.keys():
         calendarData[i].sort()
@@ -318,7 +319,7 @@ def classRoute(schoolID, classID):
     return render_template('class.html', schoolID=schoolID, classData=classData,
                            isTeacher=session['userType'] == 'admin' or session['userType'] == 'teacher',
                            getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID,
-                           calendarData=calendarData, years=sorted(calendarData.keys(), reverse = True))
+                           calendarData=calendarData, years=sorted(calendarData.keys(), reverse=True))
 
 
 @app.route('/addAdmin', methods=['POST'])
@@ -366,6 +367,7 @@ def addStud():
     flash("Student added to class")
     return redirect("/school/" + str(schoolID))
 
+
 @app.route("/setInstructor", methods=["POST"])
 def setInstructor():
     if 'username' not in session:
@@ -374,7 +376,7 @@ def setInstructor():
         session.pop('_flashes', None)
         flash("User is not a admin of this class")
         return redirect(request.referrer)
-    student = request.form.get("teacherID")
+    teacher = request.form.get("teacherID")
     schoolID = request.form.get("schoolID")
     classID = request.form.get("classID")
     dbtools.changeInstructor(session['username'], schoolID, teacher, classID)
