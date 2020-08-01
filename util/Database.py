@@ -393,12 +393,12 @@ class DBTools:
         for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'students' : {'$elemMatch' : {'username' : username}}}).limit(1):
             return(i['students'][0])
     
-    def getTeacherInfo(self, schoolID, username):
+    def getTeacherInfo(self, schoolID, teacherID):
         if not(self.checkTeacherExists(schoolID, username)):
             return {
                 'name' : ['None']
             }
-        for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'teachers' : {'$elemMatch' : {'username' : username}}}).limit(1):
+        for i in self.mongo.db.school.find({'schoolID' : schoolID}, {'_id' : 0, 'teachers' : {'$elemMatch' : {'teacherID' : teacherID}}}).limit(1):
             return(i['teachers'][0])
     
     def makePost(self, schoolID, classID, due, postbody, postTitle):
