@@ -269,8 +269,24 @@ def classRoute(schoolID, classID):
             if year not in calendarData:
                 calendarData[year] = []
             calendarData[year].append([month, day, dueInfo[1], i['title'], i['content']])
+    numToMon = {
+        1 : "JAN",
+        2 : "FEB",
+        3 : "MAR",
+        4 : "APR",
+        5 : "MAY",
+        6 : "JUN",
+        7 : "JUL",
+        8 : "AUG",
+        9 : "SEP",
+        10 : "OCT",
+        11 : "NOV",
+        12 : "DEC"
+    }
     for i in calendarData.keys():
         calendarData[i].sort()
+        for j in calendarData[i]:
+            calendarData[0] = numToMon[calendarData[0]]
     return render_template('class.html', schoolID=schoolID, classData=classData,
                            isTeacher=session['userType'] == 'admin' or session['userType'] == 'teacher',
                            getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID,
