@@ -54,6 +54,8 @@ class DBTools:
         # Ensures no identical usernames
         while self.mongo.db.school.find(checkStudentUsername).limit(1).count() != 0 and self.mongo.db.school.find(checkTeacherUsername).limit(1).count() != 0:
             gennedName += random.choice(CHARSET[:10])
+            checkStudentUsername['students.username'] = gennedName
+            checkTeacherUsername['teachers.username'] = gennedName
         self.mongo.db.school.update({'schoolID' : schoolID}, {
             '$push' : {
                 'students' : {
@@ -62,6 +64,39 @@ class DBTools:
                     'classes' : [],
                     'name' : name,
                     'studentID' : studentID
+                }
+            }
+        })
+    
+    def addTeacher(self, username, schoolID, teacherName, teacherID, skipAdminCheck = False):
+        if not(skipAdminCheck):
+            if not(self.checkAdmin(schoolID, username)):
+                return "User is not an admin of this school!"
+        if self.checkTeacherExists(schoolID, teacherID):
+            return "Teacher already exists!"
+        name = teacherName.strip().split(' ')
+        gennedName = (name[0][0] + name[-1]).lower() + random.choice(CHARSET[:10]) #flast
+        checkStudentUsername = {
+            'schoolID' : schoolID,
+            'students.username' : gennedName
+        }
+        checkTeacherUsername = {
+            'schoolID' : schoolID,
+            'teachers.username' : gennedName
+        }
+        # Ensures no identical usernames
+        while self.mongo.db.school.find(checkStudentUsername).limit(1).count() != 0 and self.mongo.db.school.find(checkTeacherUsername).limit(1).count() != 0:
+            gennedName += random.choice(CHARSET[:10])
+            checkStudentUsername['students.username'] = gennedName
+            checkTeacherUsername['teachers.username'] = gennedName
+        self.mongo.db.school.update({'schoolID' : schoolID}, {
+            '$push' : {
+                'teachers' : {
+                    'username' : gennedName,
+                    'password' : teacherID,
+                    'classes' : [],
+                    'name' : name,
+                    'teacherID' : teacherID
                 }
             }
         })
@@ -197,8 +232,8 @@ class DBTools:
         }
         return self.mongo.db.school.find(inClassCheck).limit(1).count() != 0
     
-    def checkTeacherExists(self, schoolID, teacherUsername):
-        return self.mongo.db.school.find({'schoolID' : schoolID, 'teachers.username' : teacherUsername}).limit(1).count() != 0
+    def checkTeacherExists(self, schoolID, teacherID):
+        return self.mongo.db.school.find({'schoolID' : schoolID, 'teachers.teacherID' : teacherID}).limit(1).count() != 0
 
     def getSchoolIDs(self, username):
         return [x['schools'] for x in self.mongo.db.admin.find({'username' : username}).limit(1)][0]
@@ -325,40 +360,11 @@ class DBTools:
             self.mongo.db.school.update({'schoolID' : schoolID, 'students.username' : username}, {'$set' : {'students.$.password' : newPassword}})
             self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : username}, {'$set' : {'teachers.$.password' : newPassword}})
         return "Password changed."
-    
-    def addTeacher(self, username, schoolID, teacherName, teacherPassword, skipAdminCheck = False):
-        if not(skipAdminCheck):
-            if not(self.checkAdmin(schoolID, username)):
-                return "User is not an admin of this school!"
-        name = teacherName.strip().split(' ')
-        gennedName = (name[0][0] + name[-1]).lower() + random.choice(CHARSET[:10]) #flast
-        checkStudentUsername = {
-            'schoolID' : schoolID,
-            'students.username' : gennedName
-        }
-        checkTeacherUsername = {
-            'schoolID' : schoolID,
-            'teachers.username' : gennedName
-        }
-        # Ensures no identical usernames
-        while self.mongo.db.school.find(checkStudentUsername).limit(1).count() != 0 and self.mongo.db.school.find(checkTeacherUsername).limit(1).count() != 0:
-            gennedName += random.choice(CHARSET[:10])
-        self.mongo.db.school.update({'schoolID' : schoolID}, {
-            '$push' : {
-                'teachers' : {
-                    'username' : gennedName,
-                    'password' : teacherPassword,
-                    'classes' : [],
-                    'name' : name
-                }
-            }
-        })
-        return f"Teacher account {gennedName} created."
-    
-    def changeInstructor(self, username, schoolID, classID, teacherUsername):
+        
+    def changeInstructor(self, username, schoolID, classID, teacherID):
         if not(self.checkAdmin(schoolID, username)):
             return 'You are not a administrator of this school!'
-        if not(self.checkTeacherExists(schoolID, teacherUsername)):
+        if not(self.checkTeacherExists(schoolID, teacherID)):
             return 'This teacher does not exist!'
         for i in self.mongo.db.school.find({'schoolID' : schoolID, 'classes.classID' : classID}, {'classes': {'$elemMatch': {'classID': classID}}}).limit(1):
             oldTeacher = i['classes'][0]['teacher']
@@ -369,10 +375,10 @@ class DBTools:
             })
         self.mongo.db.school.update({'schoolID' : schoolID, 'classes.classID' : classID}, { #Sets new teacher
             '$set' : {
-                'classes.$.teacher' : teacherUsername
+                'classes.$.teacher' : teacherID
             }
         })
-        self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : teacherUsername}, { #Adds class to teacher's class list
+        self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : teacherID}, { #Adds class to teacher's class list
             '$push' : {
                 'teachers.$.classes' : classID
             }
