@@ -78,6 +78,18 @@ class DBTools:
                 numAdded += 1
         return f"{numAdded} students added."
 
+    def addTeachersFromCSV(self, username, schoolID, csv):
+        if not(self.checkAdmin(schoolID, username)):
+            return "You are not a administrator of this school!"
+        csv = [[value.strip() for value in line.split(',')] for line in csv.split('\n')[1:]]
+        numAdded = 0
+        for teacherInfo in csv:
+            if len(teacherInfo) < 2:
+                continue
+            if self.addTeacher(username, schoolID, teacherInfo[0], teacherInfo[1], skipAdminCheck = True) == None:
+                numAdded += 1
+        return f"{numAdded} teachers added."
+
     def addAdmin(self, username, schoolID, adminUsername):
         if not(self.checkAdminExists(adminUsername)):
             return "This user doesn't exist!"

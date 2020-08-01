@@ -116,6 +116,34 @@ def uploadStudentCSV():
     return redirect(request.referrer)
 
 
+@app.route("/uploadTeacherCSV", methods=['POST'])
+def uploadTeacherCSV():
+    if 'username' not in session:
+        return redirect('/login')
+    if session['userType'] != 'admin':
+        session.pop('_flashes', None)
+        flash('You are not a administrator!')
+        return redirectByUserType(session['userType'])
+    if 'inputCSV' not in request.files:
+        session.pop('_flashes', None)
+        flash('No file part')
+        return redirect(request.referrer)
+    inputFile = request.files['inputCSV']
+    if inputFile.filename == '':
+        session.pop('_flashes', None)
+        flash('No file uploaded')
+        return redirect(request.referrer)
+    if inputFile.filename.rsplit('.', 1)[1].lower() != 'csv':
+        session.pop('_flashes', None)
+        flash('Invalid file type')
+        return redirect(request.referrer)
+    csv = inputFile.read().decode('utf-8')
+    flash(
+        dbtools.addTeachersFromCSV(session['username'],
+                                   request.form['schoolID'], csv))
+    return redirect(request.referrer)
+
+
 @app.route("/admin")
 def admin():
     if 'username' not in session:
