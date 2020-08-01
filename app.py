@@ -286,7 +286,7 @@ def classRoute(schoolID, classID):
     for i in calendarData.keys():
         calendarData[i].sort()
         for j in calendarData[i]:
-            calendarData[0] = numToMon[calendarData[0]]
+            j[0] = numToMon[j[0]]
     return render_template('class.html', schoolID=schoolID, classData=classData,
                            isTeacher=session['userType'] == 'admin' or session['userType'] == 'teacher',
                            getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID,
