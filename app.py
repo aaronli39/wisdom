@@ -377,7 +377,7 @@ def setInstructor():
     student = request.form.get("teacherID")
     schoolID = request.form.get("schoolID")
     classID = request.form.get("classID")
-    dbtools.addStudentClass(session['username'], schoolID, teacher, classID)
+    dbtools.changeInstructor(session['username'], schoolID, teacher, classID)
     session.pop('_flashes', None)
     flash("Instructor set to class")
     return redirect("/school/" + str(schoolID))
