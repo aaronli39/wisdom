@@ -366,6 +366,22 @@ def addStud():
     flash("Student added to class")
     return redirect("/school/" + str(schoolID))
 
+@app.route("/setInstructor", methods=["POST"])
+def setInstructor():
+    if 'username' not in session:
+        return redirect('/')
+    if session['userType'] != 'admin':
+        session.pop('_flashes', None)
+        flash("User is not a admin of this class")
+        return redirect(request.referrer)
+    student = request.form.get("teacherID")
+    schoolID = request.form.get("schoolID")
+    classID = request.form.get("classID")
+    dbtools.addStudentClass(session['username'], schoolID, teacher, classID)
+    session.pop('_flashes', None)
+    flash("Instructor set to class")
+    return redirect("/school/" + str(schoolID))
+
 
 @app.route('/makepost/<schoolID>/<classID>')
 def makePost(classID, schoolID):

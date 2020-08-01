@@ -361,14 +361,14 @@ class DBTools:
             self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : username}, {'$set' : {'teachers.$.password' : newPassword}})
         return "Password changed."
         
-    def changeInstructor(self, username, schoolID, classID, teacherID):
+    def changeInstructor(self, username, schoolID, teacherID, classID):
         if not(self.checkAdmin(schoolID, username)):
             return 'You are not a administrator of this school!'
         if not(self.checkTeacherExists(schoolID, teacherID)):
             return 'This teacher does not exist!'
         for i in self.mongo.db.school.find({'schoolID' : schoolID, 'classes.classID' : classID}, {'classes': {'$elemMatch': {'classID': classID}}}).limit(1):
             oldTeacher = i['classes'][0]['teacher']
-            self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : oldTeacher}, { #Remove class from old teacher's class list
+            self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.teacherID' : oldTeacher}, { #Remove class from old teacher's class list
                 '$pull' : {
                     'teachers.$.classes' : classID
                 }
@@ -378,7 +378,7 @@ class DBTools:
                 'classes.$.teacher' : teacherID
             }
         })
-        self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.username' : teacherID}, { #Adds class to teacher's class list
+        self.mongo.db.school.update({'schoolID' : schoolID, 'teachers.teacherID' : teacherID}, { #Adds class to teacher's class list
             '$push' : {
                 'teachers.$.classes' : classID
             }
