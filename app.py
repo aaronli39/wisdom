@@ -261,9 +261,20 @@ def classRoute(schoolID, classID):
             session.pop('_flashes', None)
             flash("You are not enrolled in this class!")
             return redirect('/student')
+    calendarData = {}
+    for i in classData['posts']:
+        if i['due'] != "Never ":
+            dueInfo = i['due'].split() #[date, time]
+            year, month, day = (int(x) for x in dueInfo[0].split('-'))
+            if year not in calendarData:
+                calendarData[year] = []
+            calendarData[year].append([month, day, dueInfo[1], i['title'], i['content']])
+    for i in calendarData.keys():
+        calendarData[i].sort()
     return render_template('class.html', schoolID=schoolID, classData=classData,
                            isTeacher=session['userType'] == 'admin' or session['userType'] == 'teacher',
-                           getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID)
+                           getTeacherInfo=dbtools.getTeacherInfo, getStudentInfo=dbtools.getStudentInfo, classID=classID,
+                           calendarData=calendarData, years=sorted(calendarData.keys(), reverse = True))
 
 
 @app.route('/addAdmin', methods=['POST'])
