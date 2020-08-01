@@ -263,7 +263,7 @@ def classRoute(schoolID, classID):
             return redirect('/student')
     calendarData = {}
     for i in classData['posts']:
-        if i['due'] != "Never ":
+        if i['due'] != "Never":
             dueInfo = i['due'].split() #[date, time]
             year, month, day = (int(x) for x in dueInfo[0].split('-'))
             if year not in calendarData:
