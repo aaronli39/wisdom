@@ -87,7 +87,7 @@
                 </div>
             </form>
         </div>
-        
+
     </div>
     <div class="row">
 
@@ -99,7 +99,8 @@
                     <input type="text" class="form-control" placeholder="Enter class ID" name="classID" required>
                     <div class="input-group-append">
                         <div class="input-group-append">
-                            <input type="text" class="form-control" placeholder="Enter student ID" name="studentID" required>
+                            <input type="text" class="form-control" placeholder="Enter student ID" name="studentID"
+                                required>
                         </div>
                     </div>
                     <div class="input-group-append">
@@ -113,7 +114,7 @@
 
     </div>
     <div class="row mt-5">
-        
+
         <div class="col text-center">
             <h3 style="text-align: left;" class="underline">Search for a class</h3>
             <div class="input-group">
@@ -153,8 +154,55 @@
         </div>
 
     </div>
+
+    <div class="row mt-5">
+
+        <div class="col">
+            <h3 class="underline">Teacher management</h3>
+            <form action="/uploadTeacherCSV" method="POST" enctype="multipart/form-data" class="form-group mb-3">
+                <label for="inputGroupFile04">Upload teacher CSV</label>
+                <div class="input-group">
+                    <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="inputGroupFile04" name="inputCSV">
+                        <label class="custom-file-label form-control-file" for="inputGroupFile04">Choose file</label>
+                    </div>
+                    <div class="input-group-append">
+                        <button id="filer" class="btn btn-dark" type="submit">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+    <div class="row">
+
+        <div class="col">
+            <form action="/setInstructor" method="POST">
+                <input type="hidden" name="schoolID" value="{{schoolData['schoolID']}}">
+                <label for="className">Add teacher to class</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" placeholder="Enter class ID" name="classID" required>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <input type="text" class="form-control" placeholder="Enter teacher ID" name="teacherID"
+                                required>
+                        </div>
+                    </div>
+                    <div class="input-group-append">
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-success" type="submit">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+
     <div class="row mt-4">
-        
+
         <div class="col">
             <h3 class="underline">Change password or add an admin below</h3>
         </div>
