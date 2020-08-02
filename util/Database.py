@@ -180,6 +180,7 @@ class DBTools:
             'schoolID' : schoolID,
             'classes.classID' : classID
         }
+        className = self.getClassInfo(username, schoolID, classID)
         self.mongo.db.school.update(classSelector, { #Add student to class's student list
             '$push' : {
                 'classes.$.students' : studentID
@@ -191,7 +192,7 @@ class DBTools:
         }
         self.mongo.db.school.update(studentSelector, {
             '$push' : {
-                'students.$.classes' : classID
+                'students.$.classes' : [classID, className["className"]]
             }
         })
         return 'Class added to student.'

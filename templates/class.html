@@ -120,9 +120,11 @@
 						<div class="card cardOut">
 							<!-- post content -->
 							<div class="card-body">
+								{% if not i["due"] == "Never" %}
 								<p class="card-title text-secondary mb-1" style="font-size: 14px;">Due
 									{{ i['due'] }}
 								</p>
+								{% endif %}
 								<h5 class="card-title">{{i['title']}}</h5>
 								<p class="card-text">{{ i['content'] | safe }}</p>
 							</div>

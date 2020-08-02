@@ -240,7 +240,7 @@ def addClass():
         return redirectByUserType(session['userType'])
     session.pop('_flashes', None)
     flash(dbtools.addClass(
-        session['username'], request.form['schoolID'], request.form['className']))
+        session['username'], request.form['schoolID'], request.form['className'].upper()))
     return redirect(request.referrer)
 
 
