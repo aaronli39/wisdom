@@ -446,6 +446,24 @@ def processMakePost(schoolID, classID):
     return redirect('/school/' + schoolID + '/class/' + classID)
 
 
+@app.route('/deletepost/<schoolID>/<classID>', methods=['POST'])
+def deletePost(schoolID, classID):
+    if 'username' not in session:
+        return redirect('/')
+    if session['userType'] != 'admin' and session['userType'] != 'teacher':
+        session.pop('_flashes', None)
+        flash("User is not a teacher or admin of this class")
+        return redirect(request.referrer)
+    if 'postIndex' not in request.form:
+        session.pop('_flashes', None)
+        flash("No post index given")
+        return redirect(request.referrer)
+    dbtools.deletePost(schoolID, classID, request.form['postIndex'])
+    session.pop('_flashes', None)
+    flash("Post deleted")
+    return redirect(request.referrer)
+    
+
 if __name__ == "__main__":
     if REPL_MODE:
         while True:

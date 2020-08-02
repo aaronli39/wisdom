@@ -412,3 +412,19 @@ class DBTools:
                 }
             }
         })
+    
+    def deletePost(self, schoolID, classID, postIndex):
+        if type(postIndex) != int:
+            return "Invalid post index"
+        if (postIndex < 0) or (self.mongo.db.school.find({'schoolID' : schoolID, 'classes.classID' : classID}, {'posts' : {'$size' : {'$gt' : postIndex}}}).count() == 0):
+            return "Post not found"
+        self.mongo.db.school.update({'schoolID' : schoolID, 'classes.classID' : classID}, {
+            '$unset' : {
+                f'posts.{postIndex}' : 1
+            }
+        })
+        self.mongo.db.school.update({'schoolID' : schoolID, 'classes.classID' : classID}, {
+            '$pull' : {
+                'posts' : None
+            }
+        })
